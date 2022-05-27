@@ -1,14 +1,26 @@
 import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Auth from "../views/auth/Auth";
-import Home from "../views/home/Home";
+
+import FoodDetails from "../views/home/FoodDetailPage";
+
 import { AuthContext } from "../context/AuthContext";
+import { LoadingScreen } from "../components/LoadingScreen";
+import { PrincipalTabs } from "../shared/NavigatorTabs";
+import { ProductResponse } from "../model/response/entity/ItemResponse";
 
-const Stack = createStackNavigator();
+export type RootStackParams = {
+  auth: undefined;
+  home: undefined;
+  FoodDetails: { food: ProductResponse; color: string };
+};
 
-export const Navigator = () => {
+const Stack = createStackNavigator<RootStackParams>();
+
+export const Routers = () => {
   const { status } = useContext(AuthContext);
 
+  if (status === "checking") return <LoadingScreen />;
   return (
     <Stack.Navigator
       screenOptions={{
@@ -22,7 +34,11 @@ export const Navigator = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="home" component={Home}></Stack.Screen>
+          <Stack.Screen name="home" component={PrincipalTabs}></Stack.Screen>
+          <Stack.Screen
+            name="FoodDetails"
+            component={FoodDetails}
+          ></Stack.Screen>
         </>
       )}
     </Stack.Navigator>

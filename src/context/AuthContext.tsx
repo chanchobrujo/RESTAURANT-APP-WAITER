@@ -3,8 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { SignInRequest } from "../model/request/SignInRequest";
 import { SignInResponse } from "../model/response/SignInResponse";
-import authApi from "../services/AuthService";
+import authApi from "../api/AuthApi";
 import { authReducer, AuthState } from "./AuthReducer";
+import { VerifyTokenResponse } from "../model/response/VerifyTokenResponse";
 
 type AuthContextProps = {
   errorMessage: string;
@@ -35,8 +36,13 @@ export const AuthProvider = ({ children }: any) => {
   const verifyToken = async () => {
     const token = await AsyncStorage.getItem("token");
     if (!token) return dispatch({ type: "notAuthenticated" });
-    //validar token
-    dispatch({ type: "signUp", payload: { token: token } });
+    try {
+      const response = await authApi.post<VerifyTokenResponse>("/verify");
+      await AsyncStorage.setItem("token", response.data.token);
+      dispatch({ type: "signUp", payload: { token: response.data.token } });
+    } catch (error: any) {
+      return dispatch({ type: "notAuthenticated" });
+    }
   };
 
   const signUp = async () => {};
@@ -57,7 +63,10 @@ export const AuthProvider = ({ children }: any) => {
       dispatch({ type: "addError", payload: message });
     }
   };
-  const logOut = () => {};
+  const logOut = async () => {
+    await AsyncStorage.removeItem("token");
+    dispatch({ type: "logout" });
+  };
   const removeError = () => {
     dispatch({ type: "removeError" });
   };

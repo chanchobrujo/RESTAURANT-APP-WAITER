@@ -17,9 +17,7 @@ import { Background } from "../../components/Background";
 import { useForm } from "../../hooks/UseHooks";
 import { AuthContext } from "../../context/AuthContext";
 
-interface Props extends StackScreenProps<any, any> {}
-
-const Auth = ({ navigation }: Props) => {
+const Auth = () => {
   const { signIn, errorMessage, removeError } = useContext(AuthContext);
 
   const { username, password, onChangue } = useForm({
@@ -40,6 +38,7 @@ const Auth = ({ navigation }: Props) => {
       { text: "Ok", onPress: removeError },
     ]);
   }, [errorMessage]);
+
   return (
     <>
       <Background />

@@ -1,15 +1,15 @@
 import React, { useContext, useEffect } from "react";
 
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   Text,
   View,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { StackScreenProps } from "@react-navigation/stack";
+import Toast from "react-native-toast-message";
 
 import { Logo } from "../../components/Logo";
 import { authStyles } from "../../theme/AuthTheme";
@@ -31,12 +31,20 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    if (errorMessage.length === 0) {
+    if (errorMessage == null || errorMessage.length === 0) {
       return;
     }
-    Alert.alert("Error de autenticación", errorMessage, [
-      { text: "Ok", onPress: removeError },
-    ]);
+
+    Toast.show({
+      type: "error",
+      position: "bottom",
+      text2: "Error de autenticación",
+      text1: errorMessage,
+      visibilityTime: 5000,
+      autoHide: true,
+      bottomOffset: 40,
+    });
+    removeError();
   }, [errorMessage]);
 
   return (

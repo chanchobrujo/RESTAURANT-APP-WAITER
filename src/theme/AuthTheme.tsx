@@ -25,11 +25,10 @@ export const authStyles = StyleSheet.create({
   },
   buttonContainer: { alignItems: "center", marginTop: 50 },
   button: {
-    borderWidth: 2,
-    borderColor: "white",
     paddingHorizontal: 20,
+    borderColor: "white",
     paddingVertical: 5,
-    borderRadius: 50,
+    borderWidth: 2,
   },
   buttonText: {
     fontSize: 18,

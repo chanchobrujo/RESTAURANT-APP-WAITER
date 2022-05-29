@@ -7,7 +7,6 @@ import {
   Text,
   View,
   TextInput,
-  TouchableOpacity,
 } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -16,9 +15,11 @@ import { authStyles } from "../../theme/AuthTheme";
 import { Background } from "../../components/Background";
 import { useForm } from "../../hooks/useHooks";
 import { AuthContext } from "../../context/AuthContext";
+import { Button } from "react-native-paper";
 
 const Auth = () => {
-  const { signIn, errorMessage, removeError } = useContext(AuthContext);
+  const { signIn, errorMessage, removeError, loading } =
+    useContext(AuthContext);
 
   const { username, password, onChangue } = useForm({
     username: "KEVIND4B60B",
@@ -90,13 +91,14 @@ const Auth = () => {
           />
 
           <View style={authStyles.buttonContainer}>
-            <TouchableOpacity
-              activeOpacity={0.8}
+            <Button
+              mode="contained"
+              loading={loading}
               style={authStyles.button}
               onPress={onLogin}
             >
-              <Text style={authStyles.buttonText}>Ingresar</Text>
-            </TouchableOpacity>
+              Iniciar sesión
+            </Button>
           </View>
         </View>
       </KeyboardAvoidingView>

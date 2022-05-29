@@ -14,7 +14,7 @@ import Toast from "react-native-toast-message";
 import { Logo } from "../../components/Logo";
 import { authStyles } from "../../theme/AuthTheme";
 import { Background } from "../../components/Background";
-import { useForm } from "../../hooks/UseHooks";
+import { useForm } from "../../hooks/useHooks";
 import { AuthContext } from "../../context/AuthContext";
 
 const Auth = () => {

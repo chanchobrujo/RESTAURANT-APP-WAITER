@@ -10,12 +10,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { RootStackParams } from "../../router/Router";
-import { useItemsById } from "../../hooks/useItemsById";
-import { FadeInImage } from "../../components/FadeInImage";
-import { FoodDetailComponent } from "../../components/FoodDetail";
+import { RootStackParams } from "../../../router/Router";
+import { useItemsById } from "../../../hooks/items/products/useProductById";
+import { FadeInImage } from "../../../components/FadeInImage";
+import { FoodDetailComponent } from "../../../components/FoodDetail";
 
-import { SERVICE_FILE } from "../../../environment/environment.prod";
+import { SERVICE_FILE } from "../../../../environment/environment.prod";
 
 interface Props extends StackScreenProps<RootStackParams, "FoodDetails"> {}
 

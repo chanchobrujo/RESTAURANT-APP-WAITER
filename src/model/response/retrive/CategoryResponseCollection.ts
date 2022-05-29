@@ -1,5 +1,5 @@
-import { ResponseCollection } from './ResponseCollection';
+import { ResponseCollection } from "./ResponseCollection";
 
 export interface CategoryResponseCollection extends ResponseCollection {
-  collections?: string[];
+  collections: string[];
 }

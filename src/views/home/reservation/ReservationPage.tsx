@@ -1,35 +1,47 @@
-import React, { useState } from "react";
-import { View, FlatList, StyleSheet, Dimensions } from "react-native";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, StyleSheet, RefreshControl } from "react-native";
 import { ReservationCard } from "../../../components/ReservationCard";
 
+const wait = (timeout: number) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 const Reservation = () => {
-  const collection: string[] = ["Fecha 25/16/8", "b", "c", "f", "g", "h"];
+  const collection: string[] = ["Fecha", "b", "c", "f", "g", "h"];
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
-    <View style={style.container}>
-      <View style={{ alignItems: "center" }}>
-        <FlatList
-          data={collection}
-          numColumns={1}
-          keyExtractor={(item: string) => item}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <ReservationCard reservation={item} />}
-        />
-      </View>
-    </View>
+    <SafeAreaView style={style.container}>
+      <FlatList
+        data={collection}
+        numColumns={1}
+        keyExtractor={(item: string) => item}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <ReservationCard reservation={item} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </SafeAreaView>
   );
 };
 
 const style = StyleSheet.create({
   container: {
-    marginTop: 10,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
 });
+{
+  /**
 
+       */
+}
 export default Reservation;

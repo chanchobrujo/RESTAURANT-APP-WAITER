@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { Button } from "react-native-paper";
 import { AuthContext } from "../../context/AuthContext";
 
 const Profile = () => {
-  const { logOut } = useContext(AuthContext);
+  const { logOut, loading } = useContext(AuthContext);
   return (
     <View>
       <Text>Mis datos</Text>
-      <Button onPress={logOut} title="Cerrar sesión" color="#5856D6" />
+      <Button loading={loading} onPress={logOut} color="red">
+        <Text>Cerrar sesión</Text>
+      </Button>
     </View>
   );
 };

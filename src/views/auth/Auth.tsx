@@ -14,7 +14,7 @@ import { Logo } from "../../components/Logo";
 import { authStyles } from "../../theme/AuthTheme";
 import { Background } from "../../components/Background";
 import { useForm } from "../../hooks/useHooks";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/auth/AuthContext";
 import { Button } from "react-native-paper";
 
 const Auth = () => {
@@ -92,8 +92,9 @@ const Auth = () => {
 
           <View style={authStyles.buttonContainer}>
             <Button
-              mode="contained"
               loading={loading}
+              disabled={loading}
+              mode="contained"
               style={authStyles.button}
               onPress={onLogin}
             >

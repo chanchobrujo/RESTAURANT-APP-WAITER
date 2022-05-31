@@ -3,17 +3,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, StyleSheet, RefreshControl } from "react-native";
 import { ReservationCard } from "../../../components/ReservationCard";
 
-const wait = (timeout: number) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
+const wait = (seconds: number) => {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 };
 
 const Reservation = () => {
   const collection: string[] = ["Fecha", "b", "c", "f", "g", "h"];
 
   const [refreshing, setRefreshing] = React.useState(false);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    wait(2).then(() => setRefreshing(false));
   }, []);
 
   return (
@@ -39,9 +40,4 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
 });
-{
-  /**
-
-       */
-}
 export default Reservation;

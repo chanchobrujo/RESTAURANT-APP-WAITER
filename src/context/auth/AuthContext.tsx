@@ -1,11 +1,11 @@
 import React, { createContext, useEffect, useReducer, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { SignInRequest } from "../model/request/SignInRequest";
-import { SignInResponse } from "../model/response/SignInResponse";
-import authApi from "../api/AuthApi";
+import authApi from "../../api/AuthApi";
 import { authReducer, AuthState } from "./AuthReducer";
-import { VerifyTokenResponse } from "../model/response/VerifyTokenResponse";
+import { SignInRequest } from "../../model/request/SignInRequest";
+import { SignInResponse } from "../../model/response/SignInResponse";
+import { VerifyTokenResponse } from "../../model/response/VerifyTokenResponse";
 
 type AuthContextProps = {
   errorMessage: string;

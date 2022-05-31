@@ -4,7 +4,7 @@ import Auth from "../views/auth/Auth";
 
 import FoodDetails from "../views/home/food/FoodDetailPage";
 
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/auth/AuthContext";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { PrincipalTabs } from "./NavigatorTabs";
 import { ProductResponse } from "../model/response/entity/ItemResponse";

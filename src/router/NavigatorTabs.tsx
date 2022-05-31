@@ -6,6 +6,7 @@ import Profile from "../views/auth/ProfilePage";
 import FoodMenu from "../views/home/food/FoodMenuPage";
 import SearchScreen from "../views/home/food/SearchFoodScreenPage";
 import Reservation from "../views/home/reservation/ReservationPage";
+import ReservationCreatePage from "../views/home/reservation/ReservationCreatePage";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,17 @@ export const PrincipalTabs = () => {
         name="Reservaciones"
         component={Reservation}
         options={{
-          tabBarLabel: "Reservaciones en mesas",
+          tabBarLabel: "Reservaciones",
+          tabBarIcon: ({ color }) => (
+            <Icon name="documents-outline" color={color} size={20} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Habilitar una reservación"
+        component={ReservationCreatePage}
+        options={{
+          tabBarLabel: "Habilitar una reservaciones",
           tabBarIcon: ({ color }) => (
             <Icon name="restaurant-outline" color={color} size={20} />
           ),

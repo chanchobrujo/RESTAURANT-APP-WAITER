@@ -10,7 +10,7 @@ interface Props {
 const width = Dimensions.get("window").width;
 
 export const ReservationCard = ({ reservation }: Props) => {
-  const cancelReservation = () => {
+  const cancelReservation = (): void => {
     Toast.show({
       type: "success",
       position: "bottom",
@@ -22,7 +22,7 @@ export const ReservationCard = ({ reservation }: Props) => {
     });
   };
 
-  const showAlert = () => {
+  const showAlert = (): void => {
     Alert.alert("Alerta", "¿Desea anular esta cuenta?", [
       {
         text: "Si",
@@ -33,11 +33,12 @@ export const ReservationCard = ({ reservation }: Props) => {
   };
 
   return (
-    <Card style={styles.cardContainer}>
+    <Card style={styles.cardContainer} mode="outlined">
       <Card.Title title="Mesa 101" subtitle="16/15/28 3:45" />
       <Card.Content>
         <Title>Kevin Anderson Palma Lluén</Title>
         <Paragraph>Total a pagar: 125 Soles.</Paragraph>
+        <Paragraph>{reservation}</Paragraph>
       </Card.Content>
 
       {/**<Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
@@ -56,11 +57,5 @@ const styles = StyleSheet.create({
     width: width * (5 / 6),
     marginVertical: 20,
     borderRadius: 10,
-  },
-  nameCard: {
-    fontWeight: "bold",
-    fontSize: 17,
-    top: 15,
-    left: 15,
   },
 });

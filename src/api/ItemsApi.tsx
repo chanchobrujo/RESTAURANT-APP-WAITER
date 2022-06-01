@@ -1,14 +1,8 @@
-import axios from "axios";
-
 import { SERVICE_ITEMS } from "../../environment/environment.prod";
+import { builderApi } from "./utilsApi";
 
 export const apis = () => {
-  const builderApi = (value: string) =>
-    axios.create({
-      baseURL: SERVICE_ITEMS.concat(value),
-    });
-
-  const itemsApi = builderApi("/products");
-  const categoriesApi = builderApi("/categories");
+  const itemsApi = builderApi(SERVICE_ITEMS, "/products");
+  const categoriesApi = builderApi(SERVICE_ITEMS, "/categories");
   return { itemsApi, categoriesApi };
 };

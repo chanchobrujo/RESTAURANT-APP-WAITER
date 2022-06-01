@@ -1,10 +1,9 @@
 import Toast from "react-native-toast-message";
-import { Picker } from "@react-native-picker/picker";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { Button, Card, TextInput } from "react-native-paper";
 import React, { useContext, useEffect, useState } from "react";
+import { Button, Card, Divider, TextInput } from "react-native-paper";
 
-import { BoardContext } from "../../../context/BoardContext";
+import PickerBoard from "../../../components/PickerBoard";
 import { ReservationContext } from "../../../context/reservation/ReservationContext";
 import { ReservationByUserRequest } from "../../../model/request/ReservationByUserRequest";
 
@@ -14,9 +13,8 @@ const ReservationCreatePage = () => {
   const [dni, setDni] = useState("");
   const [board, setBoard] = useState("");
 
-  const { loading, addReservation, message, success } =
+  const { loadingSave, addReservation, message, success } =
     useContext(ReservationContext);
-  const { collection } = useContext(BoardContext);
 
   const saveReservation = () => {
     const request: ReservationByUserRequest = { dni: dni, name: board };
@@ -46,12 +44,8 @@ const ReservationCreatePage = () => {
       <Card style={styles.cardContainer} mode="outlined">
         <Card.Title title="Registrar" />
         <Card.Content>
-          <Picker selectedValue={board} onValueChange={setBoard}>
-            <Picker.Item key={-1} label="Seleccionar una mesa" value="" />
-            {collection.map((value, i) => (
-              <Picker.Item key={i} label={value.name} value={value.name} />
-            ))}
-          </Picker>
+          <PickerBoard value={board} onChangeValue={setBoard} />
+          <Divider style={{ marginVertical: 10 }} />
           <TextInput
             keyboardType="numeric"
             label="Dni del cliente"
@@ -62,8 +56,8 @@ const ReservationCreatePage = () => {
         </Card.Content>
         <Card.Actions style={{ margin: 15, justifyContent: "center" }}>
           <Button
-            loading={loading}
-            disabled={loading}
+            loading={loadingSave}
+            disabled={loadingSave}
             mode="contained"
             style={{ width: 300 }}
             onPress={saveReservation}

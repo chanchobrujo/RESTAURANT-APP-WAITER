@@ -5,15 +5,18 @@ import Toast from "react-native-toast-message";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { Routers } from "./router/Router";
+import { BoardProvider } from "./context/BoardContext";
 import { AuthProvider } from "./context/auth/AuthContext";
 import { ReservationProvider } from "./context/reservation/ReservationContext";
-import { BoardProvider } from "./context/BoardContext";
+import { CartProvider } from "./context/cart/CartContext";
 
 const AppState = ({ children }: any) => {
   return (
     <AuthProvider>
       <BoardProvider>
-        <ReservationProvider>{children}</ReservationProvider>
+        <ReservationProvider>
+          <CartProvider>{children}</CartProvider>
+        </ReservationProvider>
       </BoardProvider>
     </AuthProvider>
   );

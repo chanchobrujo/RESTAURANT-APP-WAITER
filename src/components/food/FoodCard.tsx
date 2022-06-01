@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { SERVICE_FILE } from "../../environment/environment.prod";
-import { ProductResponse } from "../model/response/entity/ItemResponse";
-import { FadeInImage } from "./FadeInImage";
+import { SERVICE_FILE } from "../../../environment/environment.prod";
+import { ProductResponse } from "../../model/response/entity/ItemResponse";
+import { FadeInImage } from "../FadeInImage";
 
 import ImageColors from "react-native-image-colors";
 import { useNavigation } from "@react-navigation/native";

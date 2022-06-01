@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { FadeInImage } from "./FadeInImage";
-import { SERVICE_FILE } from "../../environment/environment.prod";
-import { ProductResponse } from "../model/response/entity/ItemResponse";
+import { FadeInImage } from "../FadeInImage";
+import { SERVICE_FILE } from "../../../environment/environment.prod";
+import { ProductResponse } from "../../model/response/entity/ItemResponse";
 
 interface Props {
   item: ProductResponse;

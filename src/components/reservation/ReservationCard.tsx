@@ -1,15 +1,19 @@
 import React from "react";
 import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
+
 import { Alert, Dimensions, StyleSheet } from "react-native";
 import { Button, Card, Paragraph, Title } from "react-native-paper";
+import { ReservationResponse } from "../../model/response/entity/ReservationResponse";
 
 interface Props {
-  reservation: string;
+  reservation: ReservationResponse;
 }
 
 const width = Dimensions.get("window").width;
 
 export const ReservationCard = ({ reservation }: Props) => {
+  const navigation = useNavigation();
   const cancelReservation = (): void => {
     Toast.show({
       type: "success",
@@ -34,16 +38,25 @@ export const ReservationCard = ({ reservation }: Props) => {
 
   return (
     <Card style={styles.cardContainer} mode="outlined">
-      <Card.Title title="Mesa 101" subtitle="16/15/28 3:45" />
+      <Card.Title
+        title={reservation.board}
+        subtitle={reservation.dateCreated}
+      />
       <Card.Content>
-        <Title>Kevin Anderson Palma Lluén</Title>
-        <Paragraph>Total a pagar: 125 Soles.</Paragraph>
-        <Paragraph>{reservation}</Paragraph>
+        <Title>{reservation.customer}</Title>
+        <Paragraph>{reservation.details.state}</Paragraph>
       </Card.Content>
 
-      {/**<Card.Cover source={{ uri: "https://picsum.photos/700" }} /> */}
       <Card.Actions>
-        <Button>Detalles</Button>
+        <Button
+          onPress={() =>
+            navigation.navigate("ReservationDetails", {
+              reservation: reservation,
+            })
+          }
+        >
+          Detalles
+        </Button>
         <Button color="red" onPress={showAlert}>
           Cancelar
         </Button>

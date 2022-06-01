@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Profile from "../views/auth/ProfilePage";
 import FoodMenu from "../views/home/food/FoodMenuPage";
-import SearchScreen from "../views/home/food/SearchFoodScreenPage";
 import Reservation from "../views/home/reservation/ReservationPage";
 import ReservationCreatePage from "../views/home/reservation/ReservationCreatePage";
 
@@ -23,16 +22,6 @@ export const PrincipalTabs = () => {
           tabBarLabel: "Menú de platos",
           tabBarIcon: ({ color }) => (
             <Icon name="fast-food-outline" color={color} size={27} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Buscar"
-        component={SearchScreen}
-        options={{
-          tabBarLabel: "Buscar platos",
-          tabBarIcon: ({ color }) => (
-            <Icon name="search" color={color} size={27} />
           ),
         }}
       />

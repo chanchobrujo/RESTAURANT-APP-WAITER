@@ -1,31 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
+  StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { RootStackParams } from "../../../router/Router";
-import { useItemsById } from "../../../hooks/items/products/useProductById";
 import { FadeInImage } from "../../../components/FadeInImage";
-import { FoodDetailComponent } from "../../../components/FoodDetail";
-
 import { SERVICE_FILE } from "../../../../environment/environment.prod";
+import { FoodDetailComponent } from "../../../components/food/FoodDetail";
+import { ModalByAddProduct } from "../../../components/ModalByAddProduct";
+import { useItemsById } from "../../../hooks/items/products/useProductById";
 
 interface Props extends StackScreenProps<RootStackParams, "FoodDetails"> {}
 
 const FoodDetails = ({ navigation, route }: Props) => {
-  const { food, color } = route.params;
   const { top } = useSafeAreaInsets();
 
+  const { food, color } = route.params;
   const { isLoading, item } = useItemsById(food.cod);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [board, setBoard] = useState("");
+  const [quantity, setQuantity] = useState("1");
+
   return (
     <View style={{ flex: 1 }}>
+      <ModalByAddProduct
+        value={modalVisible}
+        onChangeValue={() => setModalVisible(false)}
+        board={board}
+        setBoard={setBoard}
+        quantity={quantity}
+        setQuantity={setQuantity}
+        id={food.cod}
+        color={color}
+      />
+
       <View style={{ ...style.headerContainer, backgroundColor: color }}>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -54,6 +71,13 @@ const FoodDetails = ({ navigation, route }: Props) => {
       ) : (
         <FoodDetailComponent item={item} />
       )}
+      <Button
+        style={style.fab}
+        color={color}
+        onPress={() => setModalVisible(true)}
+      >
+        <Icon name="add-outline" color={color} size={50} />
+      </Button>
     </View>
   );
 };
@@ -87,6 +111,12 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });
 

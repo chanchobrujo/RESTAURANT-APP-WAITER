@@ -1,17 +1,20 @@
 import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import Auth from "../views/auth/Auth";
-
-import FoodDetails from "../views/home/food/FoodDetailPage";
-
-import { AuthContext } from "../context/auth/AuthContext";
-import { LoadingScreen } from "../components/LoadingScreen";
 import { PrincipalTabs } from "./NavigatorTabs";
+import { AuthContext } from "../context/auth/AuthContext";
+import FoodDetails from "../views/home/food/FoodDetailPage";
+import { LoadingScreen } from "../components/LoadingScreen";
 import { ProductResponse } from "../model/response/entity/ItemResponse";
+import ReservationDetailsPage from "../views/home/reservation/ReservationDetailsPage";
+import { ReservationResponse } from "../model/response/entity/ReservationResponse";
 
 export type RootStackParams = {
   auth: undefined;
   home: undefined;
+
+  ReservationDetails: { reservation: ReservationResponse };
   FoodDetails: { food: ProductResponse; color: string };
 };
 
@@ -38,6 +41,10 @@ export const Routers = () => {
           <Stack.Screen
             name="FoodDetails"
             component={FoodDetails}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="ReservationDetails"
+            component={ReservationDetailsPage}
           ></Stack.Screen>
         </>
       )}

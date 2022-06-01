@@ -1,37 +1,15 @@
-import React, { useState } from "react";
-import { Picker } from "@react-native-picker/picker";
+import React from "react";
 import { ActivityIndicator, StyleSheet, View, FlatList } from "react-native";
 
-import { FoodCard } from "../../../components/FoodCard";
+import { FoodCard } from "../../../components/food/FoodCard";
 import { ProductResponse } from "../../../model/response/entity/ItemResponse";
 import { useItemPaginated } from "../../../hooks/items/products/useProductHooks";
-import { useCategoryFindAll } from "../../../hooks/items/category/useCategoryHooks";
 
 const FoodMenu = () => {
-  const [selectedCategory, setSelectedCategory] = useState("");
   const { loading, collection, findAll } = useItemPaginated();
-
-  const { loadingCategories, collectionCategories, findAllCategories } =
-    useCategoryFindAll();
 
   return (
     <>
-      {!loadingCategories ? (
-        <Picker
-          selectedValue={selectedCategory}
-          onValueChange={(value) => {
-            setSelectedCategory(value);
-          }}
-        >
-          <Picker.Item label="Todo" value="" />
-          {collectionCategories.map((value, i) => (
-            <Picker.Item key={i} label={value} value={value} />
-          ))}
-        </Picker>
-      ) : (
-        <ActivityIndicator style={{ height: 30 }} size={20} color="grey" />
-      )}
-
       <View style={style.container}>
         <View style={{ alignItems: "center" }}>
           <FlatList
@@ -40,8 +18,8 @@ const FoodMenu = () => {
             keyExtractor={(item: ProductResponse) => item.cod}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => <FoodCard food={item} />}
-            onEndReached={() => findAll()}
             onEndReachedThreshold={0.4}
+            onEndReached={() => findAll()}
             ListFooterComponent={
               loading ? (
                 <ActivityIndicator

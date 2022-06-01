@@ -23,9 +23,7 @@ export const BoardProvider = ({ children }: any) => {
     try {
       const response = await retriveBoard.get<BoardResponseCollection>("");
       setCollection(response.data.collections);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
+    } catch (error: any) {}
   };
 
   return (

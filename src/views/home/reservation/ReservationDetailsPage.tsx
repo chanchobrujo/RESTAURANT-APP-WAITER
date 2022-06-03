@@ -69,7 +69,7 @@ const ReservationDetailsPage = ({ navigation, route }: Props) => {
       ) : (
         <ScrollView style={style.conten}>
           {collection.map((value, i) => (
-            <CartDetails key={i} cart={value} />
+            <CartDetails key={i} cart={value} board={reservation.board} />
           ))}
         </ScrollView>
       )}

@@ -1,6 +1,6 @@
 export interface ReservationResponse {
   id: string;
-  board?: string;
+  board: string;
   customer: string;
   dateCreated: string;
   details: Details;

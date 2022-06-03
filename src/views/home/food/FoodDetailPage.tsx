@@ -33,6 +33,7 @@ const FoodDetails = ({ navigation, route }: Props) => {
   return (
     <View style={{ flex: 1 }}>
       <ModalByAddProduct
+        name={food.names[1]}
         value={modalVisible}
         onChangeValue={() => setModalVisible(false)}
         board={board}

@@ -4,17 +4,28 @@ import { Button, Card, Paragraph, Title } from "react-native-paper";
 import { CartContext } from "../../context/cart/CartContext";
 import { SERVICE_FILE } from "../../../environment/environment.prod";
 import { LineCart } from "../../model/response/entity/CartResponse";
+import { _stompClient } from "../../App";
 
 interface Props {
   line: LineCart;
   id: string;
+  board: string;
 }
 
-export const LineCartDetails = ({ line, id }: Props) => {
+export const LineCartDetails = ({ line, id, board }: Props) => {
   const { removeProduct } = React.useContext(CartContext);
 
   const deleteProduct = () => {
     removeProduct(id, line.product.cod);
+    componentDidMount();
+  };
+
+  const componentDidMount = () => {
+    _stompClient.publish({
+      destination: "/app/food",
+      body:
+        board + "|" + line.product.names[1] + "|" + line.quantity + "|" + "R",
+    });
   };
 
   return (

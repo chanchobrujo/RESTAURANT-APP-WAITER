@@ -1,13 +1,16 @@
 import Toast from "react-native-toast-message";
 import React, { useContext, useEffect } from "react";
+
 import { Dimensions, Modal, StyleSheet, View } from "react-native";
 import { Button, Card, TextInput, Title } from "react-native-paper";
 
 import PickerBoard from "./PickerBoard";
 import { CartContext } from "../context/cart/CartContext";
+import { _stompClient } from "../App";
 
 interface Props {
   id: string;
+  name: string;
 
   value: boolean;
   onChangeValue: any;
@@ -31,11 +34,22 @@ export const ModalByAddProduct = ({
   setBoard,
   id,
   color,
+  name,
 }: Props) => {
   const { addProduct, message, success, loadingSave } = useContext(CartContext);
 
   const addProductByUser = () => {
     addProduct(board, id, parseInt(quantity));
+    componentDidMount();
+  };
+
+  const componentDidMount = () => {
+    //console.log(_stompClient.connected);
+
+    _stompClient.publish({
+      destination: "/app/food",
+      body: board + "|" + name + "|" + quantity + "|" + "A",
+    });
   };
 
   useEffect(() => {

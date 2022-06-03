@@ -8,11 +8,12 @@ import { CartResponse } from "../../model/response/entity/CartResponse";
 
 interface Props {
   cart: CartResponse;
+  board: string;
 }
 
 const width = Dimensions.get("window").width;
 
-export const CartDetails = ({ cart }: Props) => {
+export const CartDetails = ({ cart, board }: Props) => {
   return (
     <Card style={style.cardContainer}>
       <Card.Title title={"Cuenta de " + cart.customer} />
@@ -30,7 +31,12 @@ export const CartDetails = ({ cart }: Props) => {
             </>
           ) : (
             cart.collection.map((line, i) => (
-              <LineCartDetails key={i} id={cart.idLineRes} line={line} />
+              <LineCartDetails
+                key={i}
+                id={cart.idLineRes}
+                line={line}
+                board={board}
+              />
             ))
           )}
         </ScrollView>

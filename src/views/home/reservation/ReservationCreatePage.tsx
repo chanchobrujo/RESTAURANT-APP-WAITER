@@ -1,24 +1,45 @@
 import Toast from "react-native-toast-message";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, Text } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Divider, TextInput } from "react-native-paper";
+import { Button, Card, Divider, Switch, TextInput } from "react-native-paper";
 
 import PickerBoard from "../../../components/PickerBoard";
 import { ReservationContext } from "../../../context/reservation/ReservationContext";
-import { ReservationByUserRequest } from "../../../model/request/ReservationByUserRequest";
+import {
+  ReservationByUserRequest,
+  ReservationDeliveryByUserRequest,
+} from "../../../model/request/ReservationRequests";
+import PickerDelivery from "../../../components/PickerDelivery";
 
 const width = Dimensions.get("window").width;
 
 const ReservationCreatePage = () => {
   const [dni, setDni] = useState("");
+  const [delivery, setDelivery] = useState("");
   const [board, setBoard] = useState("");
 
-  const { loadingSave, addReservation, message, success } =
-    useContext(ReservationContext);
+  const {
+    loadingSave,
+    addReservation,
+    message,
+    success,
+    addReservationDelivery,
+  } = useContext(ReservationContext);
+
+  const [isDelivery, setIsDelivery] = useState(false);
+  const onToggleSwitch = () => setIsDelivery(!isDelivery);
 
   const saveReservation = () => {
-    const request: ReservationByUserRequest = { dni: dni, name: board };
-    addReservation({ dni: request.dni, name: request.name });
+    if (!isDelivery) {
+      const request: ReservationByUserRequest = { dni, name: board };
+      addReservation(request);
+    } else {
+      const request: ReservationDeliveryByUserRequest = {
+        dni,
+        unit_delivery: delivery,
+      };
+      addReservationDelivery(request);
+    }
   };
 
   useEffect(() => {
@@ -44,7 +65,36 @@ const ReservationCreatePage = () => {
       <Card style={styles.cardContainer} mode="outlined">
         <Card.Title title="Registrar" />
         <Card.Content>
-          <PickerBoard value={board} onChangeValue={setBoard} />
+          <Divider style={{ marginVertical: 10 }} />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
+          >
+            <Text>Es delivery?</Text>
+            <Text> {isDelivery ? "Si" : "No"} </Text>
+            <Switch
+              color="blue"
+              value={isDelivery}
+              onValueChange={onToggleSwitch}
+              style={{
+                width: 90,
+              }}
+            />
+          </View>
+
+          <Divider style={{ marginVertical: 10 }} />
+          {isDelivery ? (
+            <PickerDelivery
+              enable={true}
+              value={delivery}
+              onChangeValue={setDelivery}
+            />
+          ) : (
+            <PickerBoard value={board} onChangeValue={setBoard} />
+          )}
+
           <Divider style={{ marginVertical: 10 }} />
           <TextInput
             keyboardType="numeric"

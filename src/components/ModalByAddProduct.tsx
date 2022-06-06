@@ -1,12 +1,12 @@
 import Toast from "react-native-toast-message";
-import React, { useContext, useEffect } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, Modal, StyleSheet, View } from "react-native";
-import { Button, Card, TextInput, Title } from "react-native-paper";
+import { Button, Card, Switch, TextInput, Title } from "react-native-paper";
 
-import PickerBoard from "./PickerBoard";
-import { CartContext } from "../context/cart/CartContext";
 import { _stompClient } from "../App";
+import PickerBoard from "./PickerBoard";
+import PickerDelivery from "./PickerDelivery";
+import { CartContext } from "../context/cart/CartContext";
 
 interface Props {
   id: string;
@@ -36,16 +36,23 @@ export const ModalByAddProduct = ({
   color,
   name,
 }: Props) => {
-  const { addProduct, message, success, loadingSave } = useContext(CartContext);
+  const [delivery, setDelivery] = useState("");
+  const [isDelivery, setIsDelivery] = useState(false);
+  const onToggleSwitch = () => setIsDelivery(!isDelivery);
+
+  const { addProduct, addProductDelivery, message, success, loadingSave } =
+    useContext(CartContext);
 
   const addProductByUser = () => {
-    addProduct(board, id, parseInt(quantity));
-    componentDidMount();
+    if (!isDelivery) {
+      addProduct(board, id, parseInt(quantity));
+      componentDidMount();
+    } else {
+      addProductDelivery(delivery, id, parseInt(quantity));
+    }
   };
 
   const componentDidMount = () => {
-    //console.log(_stompClient.connected);
-
     _stompClient.publish({
       destination: "/app/food",
       body: board + "|" + name + "|" + quantity + "|" + "A",
@@ -53,9 +60,7 @@ export const ModalByAddProduct = ({
   };
 
   useEffect(() => {
-    if (message == null || message.length === 0) {
-      return;
-    }
+    if (message == null || message.length === 0) return;
 
     Toast.show({
       text1: message,
@@ -90,8 +95,40 @@ export const ModalByAddProduct = ({
           </Card.Content>
 
           <Card.Content style={{ marginBottom: 20 }}>
-            <Title>Elija una mesa</Title>
-            <PickerBoard value={board} onChangeValue={setBoard} />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <Title>Es delivery? {isDelivery ? "Si" : "No"} </Title>
+              <Switch
+                color="blue"
+                value={isDelivery}
+                onValueChange={onToggleSwitch}
+                style={{
+                  width: 90,
+                }}
+              />
+            </View>
+          </Card.Content>
+
+          <Card.Content>
+            {!isDelivery ? (
+              <>
+                <Title>Elija una mesa</Title>
+                <PickerBoard value={board} onChangeValue={setBoard} />
+              </>
+            ) : (
+              <>
+                <Title>Asigne a unidad delivery</Title>
+                <PickerDelivery
+                  enable={false}
+                  value={delivery}
+                  onChangeValue={setDelivery}
+                />
+              </>
+            )}
           </Card.Content>
 
           <Card.Actions>
@@ -121,6 +158,6 @@ const style = StyleSheet.create({
   },
 
   modalView: {
-    width: width * (3 / 5),
+    width: width * (4 / 5),
   },
 });

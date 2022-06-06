@@ -25,7 +25,6 @@ export const FoodCard = ({ food }: Props) => {
       fallback: "grey",
     }).then((color: any) => {
       if (!isMounted.current) return;
-
       setBgColor(color.darkVibrant || "grey");
     });
 
@@ -38,7 +37,7 @@ export const FoodCard = ({ food }: Props) => {
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={() =>
-        navigation.navigate("FoodDetails", { food: food, color: bgColor })
+        navigation.navigate("FoodDetails", { food, color: bgColor })
       }
     >
       <View

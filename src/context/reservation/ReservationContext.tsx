@@ -3,7 +3,10 @@ import React, { createContext, useEffect, useReducer, useState } from "react";
 import { apis } from "../../api/ReservationApi";
 import { reservationReducer, ReservationState } from "./ReservationReducer";
 import { ReservationResponse } from "../../model/response/entity/ReservationResponse";
-import { ReservationByUserRequest } from "../../model/request/ReservationByUserRequest";
+import {
+  ReservationByUserRequest,
+  ReservationDeliveryByUserRequest,
+} from "../../model/request/ReservationRequests";
 import { ReservationResponseCollection } from "../../model/response/retrive/ReservationResponseCollection";
 
 type ReservationContextProps = {
@@ -14,6 +17,10 @@ type ReservationContextProps = {
   collection: ReservationResponse[];
   findAll: () => void;
   addReservation: ({ dni, name }: ReservationByUserRequest) => void;
+  addReservationDelivery: ({
+    dni,
+    unit_delivery,
+  }: ReservationDeliveryByUserRequest) => void;
 };
 
 const initialState: ReservationState = {
@@ -53,13 +60,32 @@ export const ReservationProvider = ({ children }: any) => {
     }
   };
 
+  const addReservationDelivery = async ({
+    dni,
+    unit_delivery,
+  }: ReservationDeliveryByUserRequest) => {
+    setLoadingSave(true);
+    try {
+      const response = await reservation.post("/reserveDeliveryByUser", {
+        unit_delivery,
+        dni,
+      });
+
+      dispatch({ type: "messageResponse", payload: response.data.message });
+    } catch (error: any) {
+      dispatch({ type: "addError", payload: error.response.data.message });
+    } finally {
+      dispatch({ type: "removeError" });
+      setLoadingSave(false);
+    }
+  };
+
   const findAll = async () => {
     setLoading(true);
 
     try {
-      const res = await reservation.get<ReservationResponseCollection>(
-        getUri()
-      );
+      const URI = getUri();
+      const res = await reservation.get<ReservationResponseCollection>(URI);
       if (res.data.totalPages > index) {
         setCollection([...collection, ...res.data.collections]);
         setIndex(index + 1);
@@ -83,6 +109,7 @@ export const ReservationProvider = ({ children }: any) => {
         loadingSave,
         findAll,
         addReservation,
+        addReservationDelivery,
       }}
     >
       {children}

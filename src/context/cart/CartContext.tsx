@@ -2,7 +2,10 @@ import React, { createContext, useReducer, useState } from "react";
 
 import { apis } from "../../api/CartApi";
 import { CartReducer, CartState } from "./CartReducer";
-import { AddProducRequest } from "../../model/request/AddProducRequest";
+import {
+  AddProducRequest,
+  AddProductInDelivery,
+} from "../../model/request/AddProducRequest";
 import { CartResponse } from "../../model/response/entity/CartResponse";
 import { DeleteCartByUser } from "../../model/request/DeleteCartByUser";
 
@@ -12,7 +15,13 @@ type CartContextProps = {
   loading: boolean;
   loadingSave: boolean;
   collection: CartResponse[];
+
   findAll: (id: string) => void;
+  addProductDelivery: (
+    delivery: string,
+    product: string,
+    quantity: number
+  ) => void;
   addProduct: (board: string, product: string, quantity: number) => void;
   removeProduct: (idLineReservation: string, product: string) => void;
 };
@@ -44,6 +53,25 @@ export const CartProvider = ({ children }: any) => {
     } catch (error: any) {
     } finally {
       setLoading(false);
+    }
+  };
+
+  const addProductDelivery = async (
+    delivery: string,
+    product: string,
+    quantity: number
+  ) => {
+    setLoadingSave(true);
+    try {
+      const request: AddProductInDelivery = { delivery, product, quantity };
+      const response = await cart.post("/addProductInDelivery", request);
+
+      dispatch({ type: "messageResponse", payload: response.data.message });
+    } catch (error: any) {
+      dispatch({ type: "addError", payload: error.response.data.message });
+    } finally {
+      dispatch({ type: "removeError" });
+      setLoadingSave(false);
     }
   };
 
@@ -89,7 +117,10 @@ export const CartProvider = ({ children }: any) => {
         loadingSave,
         collection,
         findAll,
+
         addProduct,
+        addProductDelivery,
+
         removeProduct,
       }}
     >

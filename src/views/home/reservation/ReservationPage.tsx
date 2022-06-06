@@ -1,10 +1,10 @@
+import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useContext, useEffect, useState } from "react";
 import { FlatList, StyleSheet, RefreshControl } from "react-native";
 
 import { ReservationCard } from "../../../components/reservation/ReservationCard";
 import { ReservationContext } from "../../../context/reservation/ReservationContext";
-import { ActivityIndicator } from "react-native-paper";
 import { ReservationResponse } from "../../../model/response/entity/ReservationResponse";
 
 const Reservation = () => {

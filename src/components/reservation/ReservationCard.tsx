@@ -39,9 +39,14 @@ export const ReservationCard = ({ reservation }: Props) => {
   return (
     <Card style={styles.cardContainer} mode="outlined">
       <Card.Title
-        title={reservation.board}
+        title={
+          reservation.board
+            ? reservation.board
+            : "Unidad delivery: " + reservation.details["delivery unit"]
+        }
         subtitle={reservation.dateCreated}
       />
+
       <Card.Content>
         <Title>{reservation.customer}</Title>
         <Paragraph>{reservation.details.state}</Paragraph>
@@ -50,9 +55,7 @@ export const ReservationCard = ({ reservation }: Props) => {
       <Card.Actions>
         <Button
           onPress={() =>
-            navigation.navigate("ReservationDetails", {
-              reservation: reservation,
-            })
+            navigation.navigate("ReservationDetails", { reservation })
           }
         >
           Detalles

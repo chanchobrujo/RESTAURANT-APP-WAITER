@@ -1,7 +1,8 @@
+import React, { useContext } from "react";
 import { Picker } from "@react-native-picker/picker";
-import React, { useContext, useState } from "react";
+import { ActivityIndicator } from "react-native-paper";
 
-import { BoardContext } from "../context/BoardContext";
+import { BoardContext } from "../context/board/BoardContext";
 
 interface Props {
   value: string;
@@ -9,9 +10,11 @@ interface Props {
 }
 
 const PickerBoard = ({ value, onChangeValue }: Props) => {
-  const { collection } = useContext(BoardContext);
+  const { collection, loading } = useContext(BoardContext);
 
-  return (
+  return loading ? (
+    <ActivityIndicator size={20} />
+  ) : (
     <Picker selectedValue={value} onValueChange={onChangeValue}>
       <Picker.Item key={-1} label="Seleccionar una mesa" value="" />
       {collection.map((value, i) => (

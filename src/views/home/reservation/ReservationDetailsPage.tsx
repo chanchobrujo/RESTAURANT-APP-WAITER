@@ -1,24 +1,25 @@
 import React, { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, ScrollView } from "react-native";
 import {
-  ActivityIndicator,
   Card,
+  Title,
   Divider,
   Paragraph,
-  Title,
+  ActivityIndicator,
 } from "react-native-paper";
 
 import { RootStackParams } from "../../../router/Router";
-import { ScrollView } from "react-native-gesture-handler";
 import { CartContext } from "../../../context/cart/CartContext";
 import { CartDetails } from "../../../components/cart/CartDetails";
+import { CartResponse } from "../../../model/response/entity/CartResponse";
 
 interface Props
   extends StackScreenProps<RootStackParams, "ReservationDetails"> {}
 
 const width = Dimensions.get("window").width;
+
 const ReservationDetailsPage = ({ navigation, route }: Props) => {
   const { loading, findAll, collection, message, success } =
     React.useContext(CartContext);
@@ -53,7 +54,11 @@ const ReservationDetailsPage = ({ navigation, route }: Props) => {
       <Card style={style.cardContainer}>
         <Card.Title title="Detalle de la reserva" />
         <Card.Content>
-          <Title>{reservation.board}</Title>
+          <Title>
+            {reservation.board
+              ? reservation.board
+              : "Unidad delivery: " + reservation.details["delivery unit"]}
+          </Title>
           <Divider style={{ marginVertical: 10 }} />
           <Title>Cliente</Title>
           <Paragraph>{reservation.customer}</Paragraph>
@@ -68,7 +73,7 @@ const ReservationDetailsPage = ({ navigation, route }: Props) => {
         <ActivityIndicator size={15} />
       ) : (
         <ScrollView style={style.conten}>
-          {collection.map((value, i) => (
+          {collection.map((value: CartResponse, i: number) => (
             <CartDetails key={i} cart={value} board={reservation.board} />
           ))}
         </ScrollView>

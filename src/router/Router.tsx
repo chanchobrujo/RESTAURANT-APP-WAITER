@@ -11,11 +11,14 @@ import ReservationDetailsPage from "../views/home/reservation/ReservationDetails
 import { ReservationResponse } from "../model/response/entity/ReservationResponse";
 
 export type RootStackParams = {
-  auth: undefined;
+  Auth: undefined;
   home: undefined;
 
   ReservationDetails: { reservation: ReservationResponse };
-  FoodDetails: { food: ProductResponse; color: string };
+  FoodDetails: {
+    food: ProductResponse;
+    color: string;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -33,7 +36,7 @@ export const Routers = () => {
     >
       {status != "authenticated" ? (
         <>
-          <Stack.Screen name="auth" component={Auth}></Stack.Screen>
+          <Stack.Screen name="Auth" component={Auth}></Stack.Screen>
         </>
       ) : (
         <>

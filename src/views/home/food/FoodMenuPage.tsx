@@ -9,32 +9,30 @@ const FoodMenu = () => {
   const { loading, collection, findAll } = useItemPaginated();
 
   return (
-    <>
-      <View style={style.container}>
-        <View style={{ alignItems: "center" }}>
-          <FlatList
-            data={collection}
-            numColumns={2}
-            keyExtractor={(item: ProductResponse) => item.cod}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <FoodCard food={item} />}
-            onEndReachedThreshold={0.4}
-            onEndReached={() => findAll()}
-            ListFooterComponent={
-              loading ? (
-                <ActivityIndicator
-                  style={{ height: 30 }}
-                  size={20}
-                  color="grey"
-                />
-              ) : (
-                <></>
-              )
-            }
-          />
-        </View>
+    <View style={style.container}>
+      <View style={{ alignItems: "center" }}>
+        <FlatList
+          data={collection}
+          numColumns={2}
+          keyExtractor={(item: ProductResponse) => item.cod}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <FoodCard food={item} />}
+          onEndReachedThreshold={0.4}
+          onEndReached={() => findAll()}
+          ListFooterComponent={
+            loading ? (
+              <ActivityIndicator
+                style={{ height: 30 }}
+                size={20}
+                color="grey"
+              />
+            ) : (
+              <></>
+            )
+          }
+        />
       </View>
-    </>
+    </View>
   );
 };
 

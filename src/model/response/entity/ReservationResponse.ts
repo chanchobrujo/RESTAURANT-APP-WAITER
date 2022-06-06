@@ -9,4 +9,5 @@ export interface ReservationResponse {
 export interface Details {
   state: string;
   user?: string;
+  "delivery unit"?: string;
 }

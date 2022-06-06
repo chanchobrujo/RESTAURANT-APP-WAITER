@@ -39,7 +39,7 @@ export const PrincipalTabs = () => {
         name="Habilitar una reservación"
         component={ReservationCreatePage}
         options={{
-          tabBarLabel: "Habilitar una reservaciones",
+          tabBarLabel: "Crear reservacion",
           tabBarIcon: ({ color }) => (
             <Icon name="restaurant-outline" color={color} size={20} />
           ),

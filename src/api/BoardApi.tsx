@@ -1,7 +1,7 @@
-import { SERVICE_MAINTENANCES } from "../../environment/environment.prod";
-import { builderApi } from "./utilsApi";
+import {SERVICE_CALL} from '../../environment/environment.prod';
+import {builderApi} from './utilsApi';
 
 export const apis = () => {
-  const retriveBoard = builderApi(SERVICE_MAINTENANCES, "/retriveBoard");
-  return { retriveBoard };
+  const retriveBoard = builderApi(SERVICE_CALL, '/retriveBoard');
+  return {retriveBoard};
 };

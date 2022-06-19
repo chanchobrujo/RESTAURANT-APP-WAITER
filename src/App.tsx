@@ -1,20 +1,20 @@
-import SockJS from "sockjs-client";
-import "react-native-gesture-handler";
-import React, { useState } from "react";
-import { Appearance } from "react-native";
-import Toast from "react-native-toast-message";
-import TextEncodingPolyfill from "text-encoding";
-import { Client, IMessage } from "@stomp/stompjs";
-import { NavigationContainer } from "@react-navigation/native";
+import SockJS from 'sockjs-client';
+import 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import {Appearance} from 'react-native';
+import Toast from 'react-native-toast-message';
+import TextEncodingPolyfill from 'text-encoding';
+import {Client, IMessage} from '@stomp/stompjs';
+import {NavigationContainer} from '@react-navigation/native';
 
-import { Routers } from "./router/Router";
-import { RootStackParams } from "./router/Router";
-import { BoardProvider } from "./context/board/BoardContext";
-import { AuthProvider } from "./context/auth/AuthContext";
-import { CartProvider } from "./context/cart/CartContext";
-import { SERVICE_MAINTENANCES } from "../environment/environment.prod";
-import { ReservationProvider } from "./context/reservation/ReservationContext";
-import { UnitDeliveryProvider } from "./context/unitDelivery/UnitDeliveryContext";
+import {Routers} from './router/Router';
+import {RootStackParams} from './router/Router';
+import {BoardProvider} from './context/board/BoardContext';
+import {AuthProvider} from './context/auth/AuthContext';
+import {CartProvider} from './context/cart/CartContext';
+import {SERVICE_CALL} from '../environment/environment.prod';
+import {ReservationProvider} from './context/reservation/ReservationContext';
+import {UnitDeliveryProvider} from './context/unitDelivery/UnitDeliveryContext';
 
 declare global {
   namespace ReactNavigation {
@@ -27,7 +27,7 @@ Object.assign(global, {
   TextDecoder: TextEncodingPolyfill.TextDecoder,
 });
 
-const AppState = ({ children }: any) => {
+const AppState = ({children}: any) => {
   return (
     <AuthProvider>
       <BoardProvider>
@@ -43,7 +43,7 @@ const AppState = ({ children }: any) => {
 
 export const _stompClient: Client = new Client();
 const App = () => {
-  const url = SERVICE_MAINTENANCES.concat("/chat-websocket");
+  const url = SERVICE_CALL.concat('/chat-websocket');
   _stompClient.activate();
 
   _stompClient.configure({
@@ -55,15 +55,15 @@ const App = () => {
     webSocketFactory: () => SockJS(url),
 
     onConnect: () => {
-      _stompClient.subscribe("/notify/deliver", (e: IMessage) => {
+      _stompClient.subscribe('/notify/deliver', (e: IMessage) => {
         Toast.show({
           text1: e.body,
-          text2: "Pedido listo",
+          text2: 'Pedido listo',
           autoHide: true,
           bottomOffset: 40,
-          position: "top",
+          position: 'top',
           visibilityTime: 5000,
-          type: "success",
+          type: 'success',
         });
       });
     },

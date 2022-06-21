@@ -55,7 +55,8 @@ const App = () => {
     webSocketFactory: () => SockJS(url),
 
     onConnect: () => {
-      _stompClient.subscribe('/notify/deliver', (e: IMessage) => {
+      /**
+       * _stompClient.subscribe('/notify/deliver', (e: IMessage) => {
         Toast.show({
           text1: e.body,
           text2: 'Pedido listo',
@@ -66,6 +67,7 @@ const App = () => {
           type: 'success',
         });
       });
+       */
     },
   });
   const [theme, setTheme] = useState(Appearance.getColorScheme());

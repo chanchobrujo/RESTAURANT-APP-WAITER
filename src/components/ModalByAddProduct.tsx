@@ -1,12 +1,12 @@
-import Toast from "react-native-toast-message";
-import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, Modal, StyleSheet, View } from "react-native";
-import { Button, Card, Switch, TextInput, Title } from "react-native-paper";
+import Toast from 'react-native-toast-message';
+import React, {useContext, useEffect, useState} from 'react';
+import {Dimensions, Modal, StyleSheet, View} from 'react-native';
+import {Button, Card, Switch, TextInput, Title} from 'react-native-paper';
 
-import { _stompClient } from "../App";
-import PickerBoard from "./PickerBoard";
-import PickerDelivery from "./PickerDelivery";
-import { CartContext } from "../context/cart/CartContext";
+import {_stompClient} from '../App';
+import PickerBoard from './PickerBoard';
+import PickerDelivery from './PickerDelivery';
+import {CartContext} from '../context/cart/CartContext';
 
 interface Props {
   id: string;
@@ -23,7 +23,7 @@ interface Props {
   color: string;
 }
 
-const width = Dimensions.get("window").width;
+const width = Dimensions.get('window').width;
 
 export const ModalByAddProduct = ({
   value,
@@ -36,11 +36,11 @@ export const ModalByAddProduct = ({
   color,
   name,
 }: Props) => {
-  const [delivery, setDelivery] = useState("");
+  const [delivery, setDelivery] = useState('');
   const [isDelivery, setIsDelivery] = useState(false);
   const onToggleSwitch = () => setIsDelivery(!isDelivery);
 
-  const { addProduct, addProductDelivery, message, success, loadingSave } =
+  const {addProduct, addProductDelivery, message, success, loadingSave} =
     useContext(CartContext);
 
   const addProductByUser = () => {
@@ -53,10 +53,10 @@ export const ModalByAddProduct = ({
   };
 
   const componentDidMount = () => {
-    _stompClient.publish({
+    /**_stompClient.publish({
       destination: "/app/food",
       body: board + "|" + name + "|" + quantity + "|" + "A",
-    });
+    }); */
   };
 
   useEffect(() => {
@@ -66,44 +66,43 @@ export const ModalByAddProduct = ({
       text1: message,
       autoHide: true,
       bottomOffset: 40,
-      position: "bottom",
+      position: 'bottom',
       visibilityTime: 5000,
-      type: success ? "success" : "error",
+      type: success ? 'success' : 'error',
     });
 
-    setQuantity("1");
-    setBoard("");
+    setQuantity('1');
+    setBoard('');
     onChangeValue();
   }, [message]);
 
   return (
-    <Modal animationType="fade" transparent={true} visible={value}>
+    <Modal animationType='fade' transparent={true} visible={value}>
       <View style={style.centeredView}>
         <Card style={style.modalView}>
-          <Card.Title title="Agregar a una mesa" />
+          <Card.Title title='Agregar a una mesa' />
 
-          <Card.Content style={{ marginBottom: 20 }}>
+          <Card.Content style={{marginBottom: 20}}>
             <Title>Cantidad a llevar</Title>
             <TextInput
               onChangeText={setQuantity}
-              style={{ width: 100 }}
-              keyboardType="numeric"
-              label="Cantidad"
-              mode="outlined"
+              style={{width: 100}}
+              keyboardType='numeric'
+              label='Cantidad'
+              mode='outlined'
               value={quantity}
             />
           </Card.Content>
 
-          <Card.Content style={{ marginBottom: 20 }}>
+          <Card.Content style={{marginBottom: 20}}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-              }}
-            >
-              <Title>Es delivery? {isDelivery ? "Si" : "No"} </Title>
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+              }}>
+              <Title>Es delivery? {isDelivery ? 'Si' : 'No'} </Title>
               <Switch
-                color="blue"
+                color='blue'
                 value={isDelivery}
                 onValueChange={onToggleSwitch}
                 style={{
@@ -132,14 +131,10 @@ export const ModalByAddProduct = ({
           </Card.Content>
 
           <Card.Actions>
-            <Button
-              color={color}
-              onPress={addProductByUser}
-              loading={loadingSave}
-            >
+            <Button color={color} onPress={addProductByUser} loading={loadingSave}>
               Agregar
             </Button>
-            <Button color="red" onPress={onChangeValue}>
+            <Button color='red' onPress={onChangeValue}>
               Cancelar
             </Button>
           </Card.Actions>
@@ -152,8 +147,8 @@ export const ModalByAddProduct = ({
 const style = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
   },
 

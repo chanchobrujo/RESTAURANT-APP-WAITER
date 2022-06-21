@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect} from 'react';
 
 import {
   Keyboard,
@@ -7,28 +7,27 @@ import {
   Text,
   View,
   TextInput,
-} from "react-native";
-import Toast from "react-native-toast-message";
+} from 'react-native';
+import Toast from 'react-native-toast-message';
 
-import { Logo } from "../../components/Logo";
-import { authStyles } from "../../theme/AuthTheme";
-import { Background } from "../../components/Background";
-import { useForm } from "../../hooks/useHooks";
-import { AuthContext } from "../../context/auth/AuthContext";
-import { Button } from "react-native-paper";
+import {Logo} from '../../components/Logo';
+import {authStyles} from '../../theme/AuthTheme';
+import {Background} from '../../components/Background';
+import {useForm} from '../../hooks/useHooks';
+import {AuthContext} from '../../context/auth/AuthContext';
+import {Button} from 'react-native-paper';
 
 const Auth = () => {
-  const { signIn, errorMessage, removeError, loading } =
-    useContext(AuthContext);
+  const {signIn, errorMessage, removeError, loading} = useContext(AuthContext);
 
-  const { username, password, onChangue } = useForm({
-    username: "KEVIND4B60B",
-    password: "kevin12345@",
+  const {username, password, onChangue} = useForm({
+    username: 'KEVIND4B60B',
+    password: 'kevin12345@',
   });
 
   const onLogin = () => {
     Keyboard.dismiss();
-    signIn({ username, password });
+    signIn({username, password});
   };
 
   useEffect(() => {
@@ -37,9 +36,9 @@ const Auth = () => {
     }
 
     Toast.show({
-      type: "error",
-      position: "bottom",
-      text2: "Error de autenticación",
+      type: 'error',
+      position: 'bottom',
+      text2: 'Error de autenticación',
       text1: errorMessage,
       visibilityTime: 5000,
       autoHide: true,
@@ -53,24 +52,23 @@ const Auth = () => {
       <Background />
 
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={authStyles.formContainer}>
           <Logo />
 
-          <Text style={authStyles.title}>Autenticación</Text>
-          <Text style={authStyles.label}>Usuario</Text>
+          <Text style={{...authStyles.title, color: 'white'}}>Autenticación</Text>
+          <Text style={{...authStyles.label, color: 'white'}}>Usuario</Text>
 
           <TextInput
-            placeholder="Ingrese su usuario"
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            underlineColorAndroid="white"
+            placeholder='Ingrese su usuario'
+            placeholderTextColor='rgba(255,255,255,0.4)'
+            underlineColorAndroid='white'
             style={authStyles.input}
-            selectionColor="white"
-            autoCapitalize="none"
+            selectionColor='white'
+            autoCapitalize='none'
             autoCorrect={false}
-            onChangeText={(value) => onChangue(value, "username")}
+            onChangeText={(value) => onChangue(value, 'username')}
             value={username}
           />
 
@@ -78,14 +76,14 @@ const Auth = () => {
 
           <TextInput
             secureTextEntry
-            placeholder="*********"
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            underlineColorAndroid="white"
+            placeholder='*********'
+            placeholderTextColor='rgba(255,255,255,0.4)'
+            underlineColorAndroid='white'
             style={authStyles.input}
-            selectionColor="white"
-            autoCapitalize="none"
+            selectionColor='white'
+            autoCapitalize='none'
             autoCorrect={false}
-            onChangeText={(value) => onChangue(value, "password")}
+            onChangeText={(value) => onChangue(value, 'password')}
             value={password}
             onSubmitEditing={onLogin}
           />
@@ -94,10 +92,9 @@ const Auth = () => {
             <Button
               loading={loading}
               disabled={loading}
-              mode="contained"
+              mode='contained'
               style={authStyles.button}
-              onPress={onLogin}
-            >
+              onPress={onLogin}>
               Iniciar sesión
             </Button>
           </View>

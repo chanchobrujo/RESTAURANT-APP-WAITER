@@ -1,16 +1,16 @@
-import React, { createContext, useEffect, useReducer, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {createContext, useEffect, useReducer, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import authApi from "../../api/AuthApi";
-import { authReducer, AuthState } from "./AuthReducer";
-import { SignInRequest } from "../../model/request/SignInRequest";
-import { SignInResponse } from "../../model/response/SignInResponse";
-import { VerifyTokenResponse } from "../../model/response/VerifyTokenResponse";
+import authApi from '../../api/AuthApi';
+import {authReducer, AuthState} from './AuthReducer';
+import {SignInRequest} from '../../model/request/SignInRequest';
+import {SignInResponse} from '../../model/response/SignInResponse';
+import {VerifyTokenResponse} from '../../model/response/VerifyTokenResponse';
 
 type AuthContextProps = {
   errorMessage: string;
   token: string | null;
-  status: "checking" | "authenticated" | "not-authenticated";
+  status: 'checking' | 'authenticated' | 'not-authenticated';
 
   signUp: () => void;
   signIn: (request: SignInRequest) => void;
@@ -21,14 +21,14 @@ type AuthContextProps = {
 };
 
 const authInitialState: AuthState = {
-  status: "checking",
+  status: 'checking',
   token: null,
-  errorMessage: "",
+  errorMessage: '',
 };
 
 export const AuthContext = createContext({} as AuthContextProps);
 
-export const AuthProvider = ({ children }: any) => {
+export const AuthProvider = ({children}: any) => {
   const [loading, setloading] = useState(false);
   const [state, dispatch] = useReducer(authReducer, authInitialState);
 
@@ -37,51 +37,50 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   const verifyToken = async () => {
-    const token = await AsyncStorage.getItem("token");
-    if (!token) return dispatch({ type: "notAuthenticated" });
+    const token = await AsyncStorage.getItem('token');
+    if (!token) return dispatch({type: 'notAuthenticated'});
     try {
-      const response = await authApi.post<VerifyTokenResponse>("/verify");
-      await AsyncStorage.setItem("token", response.data.token);
-      dispatch({ type: "signUp", payload: { token: response.data.token } });
+      const response = await authApi.post<VerifyTokenResponse>('/verify');
+      await AsyncStorage.setItem('token', response.data.token);
+      dispatch({type: 'signUp', payload: {token: response.data.token}});
     } catch (error: any) {
-      return dispatch({ type: "notAuthenticated" });
+      return dispatch({type: 'notAuthenticated'});
     }
   };
 
   const signUp = async () => {};
-  const signIn = async ({ username, password }: SignInRequest) => {
+  const signIn = async ({username, password}: SignInRequest) => {
     try {
       setloading(true);
-      const response = await authApi.post<SignInResponse>("/singIn", {
+      const response = await authApi.post<SignInResponse>('/ForWaiter', {
         username,
         password,
       });
       let token: string = response.data.token;
 
-      dispatch({ type: "signUp", payload: { token: token } });
-      await AsyncStorage.setItem("token", token);
+      dispatch({type: 'signUp', payload: {token: token}});
+      await AsyncStorage.setItem('token', token);
       setloading(false);
     } catch (error: any) {
       const message = error.response.data.message;
 
-      dispatch({ type: "addError", payload: message });
+      dispatch({type: 'addError', payload: message});
       setloading(false);
     }
   };
   const logOut = async () => {
     setloading(true);
-    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem('token');
     setloading(false);
-    dispatch({ type: "logout" });
+    dispatch({type: 'logout'});
   };
   const removeError = () => {
-    dispatch({ type: "removeError" });
+    dispatch({type: 'removeError'});
   };
 
   return (
     <AuthContext.Provider
-      value={{ ...state, signUp, signIn, logOut, removeError, loading }}
-    >
+      value={{...state, signUp, signIn, logOut, removeError, loading}}>
       {children}
     </AuthContext.Provider>
   );

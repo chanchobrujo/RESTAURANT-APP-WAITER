@@ -1,17 +1,19 @@
+import React from 'react';
 import SockJS from 'sockjs-client';
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
-import {Appearance} from 'react-native';
+import {Dimensions} from 'react-native';
+import notifee from '@notifee/react-native';
 import Toast from 'react-native-toast-message';
-import TextEncodingPolyfill from 'text-encoding';
 import {Client, IMessage} from '@stomp/stompjs';
+import TextEncodingPolyfill from 'text-encoding';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {Routers} from './router/Router';
 import {RootStackParams} from './router/Router';
-import {BoardProvider} from './context/board/BoardContext';
 import {AuthProvider} from './context/auth/AuthContext';
 import {CartProvider} from './context/cart/CartContext';
+import {BoardProvider} from './context/board/BoardContext';
+import {Notify} from './model/response/NotifyCookResponse';
 import {SERVICE_CALL} from '../environment/environment.prod';
 import {ReservationProvider} from './context/reservation/ReservationContext';
 import {UnitDeliveryProvider} from './context/unitDelivery/UnitDeliveryContext';
@@ -27,6 +29,10 @@ Object.assign(global, {
   TextDecoder: TextEncodingPolyfill.TextDecoder,
 });
 
+export const _stompClient: Client = new Client();
+export const width = Dimensions.get('window').width;
+export const url = SERVICE_CALL.concat('/chat-websocket');
+
 const AppState = ({children}: any) => {
   return (
     <AuthProvider>
@@ -41,9 +47,8 @@ const AppState = ({children}: any) => {
   );
 };
 
-export const _stompClient: Client = new Client();
-const App = () => {
-  const url = SERVICE_CALL.concat('/chat-websocket');
+const App = () => { 
+
   _stompClient.activate();
 
   _stompClient.configure({
@@ -52,26 +57,8 @@ const App = () => {
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
     logRawCommunication: false,
-    webSocketFactory: () => SockJS(url),
-
-    onConnect: () => {
-      /**
-       * _stompClient.subscribe('/notify/deliver', (e: IMessage) => {
-        Toast.show({
-          text1: e.body,
-          text2: 'Pedido listo',
-          autoHide: true,
-          bottomOffset: 40,
-          position: 'top',
-          visibilityTime: 5000,
-          type: 'success',
-        });
-      });
-       */
-    },
+    webSocketFactory: () => SockJS(url), 
   });
-  const [theme, setTheme] = useState(Appearance.getColorScheme());
-  Appearance.addChangeListener((scheme) => setTheme(scheme.colorScheme));
 
   return (
     <NavigationContainer>

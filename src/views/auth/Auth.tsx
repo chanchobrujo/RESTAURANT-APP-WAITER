@@ -21,7 +21,7 @@ const Auth = () => {
   const {signIn, errorMessage, removeError, loading} = useContext(AuthContext);
 
   const {username, password, onChangue} = useForm({
-    username: 'KEVIND4B60B',
+    username: 'JOS7C802F',
     password: 'kevin12345@',
   });
 

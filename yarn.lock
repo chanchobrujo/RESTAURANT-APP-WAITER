@@ -1185,6 +1185,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notifee/react-native@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-5.3.0.tgz#79d20e2d9d383d45de3efd12f616606ac7a31229"
+  integrity sha512-P8uj/Ar4sAJ9sq+1W6qklQ2yw66GBTYD3qgKXoD6sJihoCVbniQ2A8xMYIPG1Y/To/DcbPouc9lsNm2XrxQQXA==
+
 "@react-native-async-storage/async-storage@^1.17.5":
   version "1.17.5"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.5.tgz#8cc3edd305d09a3c252d88921f0d2846a0444f25"
@@ -6235,6 +6240,13 @@ react-native-codegen@^0.0.17:
     flow-parser "^0.121.0"
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
+
+react-native-easy-grid@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-easy-grid/-/react-native-easy-grid-0.2.2.tgz#f0be33620be1ebe2d2295918eb58b0a27e8272ab"
+  integrity sha512-MlYrNIldnEMKn6TVatQN1P64GoVlwGIuz+8ncdfJ0Wq/xtzUkQwlil8Uksyp7MhKfENE09MQnGNcba6Mx3oSAA==
+  dependencies:
+    lodash "^4.17.15"
 
 react-native-gesture-handler@^2.4.2:
   version "2.4.2"

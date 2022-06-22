@@ -7,6 +7,7 @@ import {_stompClient} from '../App';
 import PickerBoard from './PickerBoard';
 import PickerDelivery from './PickerDelivery';
 import {CartContext} from '../context/cart/CartContext';
+import {AuthContext} from '../context/auth/AuthContext';
 
 interface Props {
   id: string;
@@ -40,23 +41,18 @@ export const ModalByAddProduct = ({
   const [isDelivery, setIsDelivery] = useState(false);
   const onToggleSwitch = () => setIsDelivery(!isDelivery);
 
+  const {publishMessage} = useContext(AuthContext);
+
   const {addProduct, addProductDelivery, message, success, loadingSave} =
     useContext(CartContext);
 
   const addProductByUser = () => {
     if (!isDelivery) {
       addProduct(board, id, parseInt(quantity));
-      componentDidMount();
+      publishMessage({board, food: name, quantity: parseInt(quantity)});
     } else {
       addProductDelivery(delivery, id, parseInt(quantity));
     }
-  };
-
-  const componentDidMount = () => {
-    /**_stompClient.publish({
-      destination: "/app/food",
-      body: board + "|" + name + "|" + quantity + "|" + "A",
-    }); */
   };
 
   useEffect(() => {

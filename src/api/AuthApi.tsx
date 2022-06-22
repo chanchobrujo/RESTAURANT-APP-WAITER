@@ -1,13 +1,11 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {SERVICE_CALL} from '../../environment/environment.prod';
+import {builderApi, builderAuthoriesByStorage} from './utilsApi';
 
-const authApi = axios.create({baseURL: SERVICE_CALL.concat('/auth')});
+export const apis = () => {
+  const authApi = builderApi(SERVICE_CALL, '/auth');
+  const profileApi = builderApi(SERVICE_CALL, '/my-personal-data');
 
-authApi.interceptors.request.use(async (config: any) => {
-  const token = await AsyncStorage.getItem('token');
-  if (token) config.headers['Authorization'] = `Bearer ${token}`;
-  return config;
-});
-export default authApi;
+  builderAuthoriesByStorage(authApi);
+  builderAuthoriesByStorage(profileApi);
+  return {authApi, profileApi};
+};

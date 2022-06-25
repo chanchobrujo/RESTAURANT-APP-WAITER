@@ -1,13 +1,30 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, View, FlatList} from 'react-native';
 
+import {specialityApis} from '../../../api/SpecialityApi';
 import {FoodCard} from '../../../components/food/FoodCard';
+import {AuthContext} from '../../../context/auth/AuthContext';
 import {ProductResponse} from '../../../model/response/entity/ItemResponse';
 import {useItemPaginated} from '../../../hooks/items/products/useProductHooks';
-import {AuthContext} from '../../../context/auth/AuthContext';
+import {SpecialtyResponse} from '../../../model/response/entity/SpecialtyResponse';
 
 const FoodMenu = () => {
+  const {myPersonalData} = useContext(AuthContext);
+  const {specialityApi} = specialityApis();
+
+  const [speciality, setSpeciality] = useState<number>(0);
   const {loading, collection, findAll} = useItemPaginated();
+
+  useEffect(() => {
+    let endpoint: string = `/findByName?name=${myPersonalData.specialty}`;
+
+    async function fetchData() {
+      const response = await specialityApi.get<SpecialtyResponse>(endpoint);
+      setSpeciality(response.data.id);
+      findAll(response.data.id);
+    }
+    fetchData();
+  }, []);
 
   return (
     <View style={style.container}>
@@ -19,7 +36,7 @@ const FoodMenu = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => <FoodCard food={item} />}
           onEndReachedThreshold={0.4}
-          onEndReached={() => findAll()}
+          onEndReached={() => findAll(speciality)}
           ListFooterComponent={
             loading ? (
               <ActivityIndicator style={{height: 30}} size={20} color='grey' />
@@ -39,10 +56,6 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
   },
 });
 

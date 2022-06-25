@@ -1,10 +1,10 @@
 import SockJS from 'sockjs-client';
-import {IMessage} from '@stomp/stompjs';
 import notifee from '@notifee/react-native';
+import {IMessage, IPublishParams} from '@stomp/stompjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {createContext, useEffect, useReducer, useState} from 'react';
 
-import {apis} from '../../api/AuthApi';
+import {apisAuth} from '../../api/AuthApi';
 import {url, _stompClient} from '../../App';
 import {authReducer, AuthState} from './AuthReducer';
 import {Notify} from '../../model/response/NotifyCookResponse';
@@ -38,7 +38,8 @@ const authInitialState: AuthState = {
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({children}: any) => {
-  const {authApi, profileApi} = apis();
+  const {authApi, profileApi} = apisAuth();
+
   const [myPersonalData, setMyPorsonalData] = useState<UserResponse>({
     id: '',
     dni: '',
@@ -89,20 +90,20 @@ export const AuthProvider = ({children}: any) => {
     webSocketFactory: () => SockJS(url),
 
     onConnect: async () => {
-      const response = await profileApi.get<UserResponse>('');
-      const endpoint: string = '/notify/deliver/' + response.data.specialty;
-      _stompClient.subscribe(endpoint, (e: IMessage) => sendNotify(e.body));
+      try {
+        const endpoint: string = '/notify/deliver/' + myPersonalData.specialty;
+        _stompClient.subscribe(endpoint, (e: IMessage) => sendNotify(e.body));
+      } catch (error) {}
     },
   });
 
   const publishMessage = async (message: NotifyCookRequest) => {
+    const body: string = JSON.stringify(message);
     const response = await profileApi.get<UserResponse>('');
-    const endpoint: string = '/app/food/' + response.data.specialty;
+    const destination: string = '/app/food/' + response.data.specialty;
 
-    _stompClient.publish({
-      destination: endpoint,
-      body: JSON.stringify(message),
-    });
+    const send: IPublishParams = {destination, body};
+    _stompClient.publish(send);
   };
 
   const verifyToken = async () => {
@@ -118,13 +119,14 @@ export const AuthProvider = ({children}: any) => {
   };
 
   const myProfileData = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) return dispatch({type: 'notAuthenticated'});
     try {
       const response = await profileApi.get<UserResponse>('');
       setMyPorsonalData(response.data);
+
       dispatch({type: 'myData', payload: {mydata: response.data}});
-    } catch (error: any) {
-      return dispatch({type: 'notAuthenticated'});
-    }
+    } catch (error: any) {}
   };
 
   const signIn = async ({username, password}: SignInRequest) => {
@@ -138,6 +140,7 @@ export const AuthProvider = ({children}: any) => {
 
       dispatch({type: 'signUp', payload: {token: token}});
       await AsyncStorage.setItem('token', token);
+
       setloading(false);
     } catch (error: any) {
       const message = error.response.data.message;

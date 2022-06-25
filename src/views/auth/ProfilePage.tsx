@@ -6,11 +6,7 @@ import {AuthContext} from '../../context/auth/AuthContext';
 import {InputLabelNoEditable} from '../../components/InputLabelNoEditable';
 
 const Profile = () => {
-  const {logOut, myPersonalData, myProfileData} = useContext(AuthContext);
-
-  useEffect(() => {
-    myProfileData();
-  }, []);
+  const {logOut, myPersonalData} = useContext(AuthContext);
 
   return (
     <Card style={{margin: 15}}>

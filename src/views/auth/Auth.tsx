@@ -1,5 +1,4 @@
 import React, {useContext, useEffect} from 'react';
-
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -8,14 +7,14 @@ import {
   View,
   TextInput,
 } from 'react-native';
+import {Button} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
 import {Logo} from '../../components/Logo';
+import {useForm} from '../../hooks/UseHooks';
 import {authStyles} from '../../theme/AuthTheme';
 import {Background} from '../../components/Background';
-import {useForm} from '../../hooks/useHooks';
 import {AuthContext} from '../../context/auth/AuthContext';
-import {Button} from 'react-native-paper';
 
 const Auth = () => {
   const {signIn, errorMessage, removeError, loading} = useContext(AuthContext);

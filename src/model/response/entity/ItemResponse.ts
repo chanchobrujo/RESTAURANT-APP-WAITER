@@ -7,5 +7,6 @@ export interface ProductResponse {
   metric: string;
   price: number;
   stock: number;
+  speciality?: string;
   category: string;
 }

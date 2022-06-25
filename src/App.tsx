@@ -1,10 +1,9 @@
 import React from 'react';
 import SockJS from 'sockjs-client';
+import {Client} from '@stomp/stompjs';
 import 'react-native-gesture-handler';
 import {Dimensions} from 'react-native';
-import notifee from '@notifee/react-native';
 import Toast from 'react-native-toast-message';
-import {Client, IMessage} from '@stomp/stompjs';
 import TextEncodingPolyfill from 'text-encoding';
 import {NavigationContainer} from '@react-navigation/native';
 
@@ -13,7 +12,6 @@ import {RootStackParams} from './router/Router';
 import {AuthProvider} from './context/auth/AuthContext';
 import {CartProvider} from './context/cart/CartContext';
 import {BoardProvider} from './context/board/BoardContext';
-import {Notify} from './model/response/NotifyCookResponse';
 import {SERVICE_CALL} from '../environment/environment.prod';
 import {ReservationProvider} from './context/reservation/ReservationContext';
 import {UnitDeliveryProvider} from './context/unitDelivery/UnitDeliveryContext';
@@ -47,8 +45,7 @@ const AppState = ({children}: any) => {
   );
 };
 
-const App = () => { 
-
+const App = () => {
   _stompClient.activate();
 
   _stompClient.configure({
@@ -57,7 +54,7 @@ const App = () => {
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
     logRawCommunication: false,
-    webSocketFactory: () => SockJS(url), 
+    webSocketFactory: () => SockJS(url),
   });
 
   return (

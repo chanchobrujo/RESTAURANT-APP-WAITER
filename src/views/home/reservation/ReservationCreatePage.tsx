@@ -1,44 +1,32 @@
-import Toast from "react-native-toast-message";
-import { Dimensions, StyleSheet, View, Text } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Divider, Switch, TextInput } from "react-native-paper";
+import Toast from 'react-native-toast-message';
+import {Dimensions, StyleSheet, View, Text} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {Button, Card, Divider, Switch, TextInput} from 'react-native-paper';
 
-import PickerBoard from "../../../components/PickerBoard";
-import { ReservationContext } from "../../../context/reservation/ReservationContext";
-import {
-  ReservationByUserRequest,
-  ReservationDeliveryByUserRequest,
-} from "../../../model/request/ReservationRequests";
-import PickerDelivery from "../../../components/PickerDelivery";
+import PickerBoard from '../../../components/pickers/PickerBoard';
+import PickerDelivery from '../../../components/pickers/PickerDelivery';
+import {ReservationContext} from '../../../context/reservation/ReservationContext';
+import {ReservationByUserRequest} from '../../../model/request/ReservationRequests';
 
-const width = Dimensions.get("window").width;
+const width = Dimensions.get('window').width;
 
 const ReservationCreatePage = () => {
-  const [dni, setDni] = useState("");
-  const [delivery, setDelivery] = useState("");
-  const [board, setBoard] = useState("");
+  const [dni, setDni] = useState('');
+  const [unit_delivery, setDelivery] = useState('');
+  const [board, setBoard] = useState('');
 
-  const {
-    loadingSave,
-    addReservation,
-    message,
-    success,
-    addReservationDelivery,
-  } = useContext(ReservationContext);
+  const {loadingSave, addReservation, message, success, addReservationDelivery} =
+    useContext(ReservationContext);
 
   const [isDelivery, setIsDelivery] = useState(false);
   const onToggleSwitch = () => setIsDelivery(!isDelivery);
 
   const saveReservation = () => {
     if (!isDelivery) {
-      const request: ReservationByUserRequest = { dni, name: board };
+      const request: ReservationByUserRequest = {dni, name: board};
       addReservation(request);
     } else {
-      const request: ReservationDeliveryByUserRequest = {
-        dni,
-        unit_delivery: delivery,
-      };
-      addReservationDelivery(request);
+      addReservationDelivery({dni, unit_delivery});
     }
   };
 
@@ -48,70 +36,66 @@ const ReservationCreatePage = () => {
     }
 
     Toast.show({
-      type: success ? "success" : "error",
-      position: "bottom",
+      type: success ? 'success' : 'error',
+      position: 'bottom',
       text1: message,
       visibilityTime: 5000,
       autoHide: true,
       bottomOffset: 40,
     });
 
-    setDni("");
-    setBoard("");
+    setDni('');
+    setBoard('');
   }, [message]);
 
   return (
     <View style={styles.container}>
-      <Card style={styles.cardContainer} mode="outlined">
-        <Card.Title title="Registrar" />
+      <Card style={styles.cardContainer} mode='outlined'>
+        <Card.Title title='Registrar' />
         <Card.Content>
-          <Divider style={{ marginVertical: 10 }} />
+          <Divider style={{marginVertical: 10}} />
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-            }}
-          >
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}>
             <Text>Es delivery?</Text>
-            <Text> {isDelivery ? "Si" : "No"} </Text>
+            <Text> {isDelivery ? 'Si' : 'No'} </Text>
             <Switch
-              color="blue"
+              color='blue'
               value={isDelivery}
               onValueChange={onToggleSwitch}
-              style={{
-                width: 90,
-              }}
+              style={{width: 90}}
             />
           </View>
 
-          <Divider style={{ marginVertical: 10 }} />
+          <Divider style={{marginVertical: 10}} />
           {isDelivery ? (
             <PickerDelivery
               enable={true}
-              value={delivery}
+              value={unit_delivery}
               onChangeValue={setDelivery}
             />
           ) : (
             <PickerBoard value={board} onChangeValue={setBoard} />
           )}
 
-          <Divider style={{ marginVertical: 10 }} />
+          <Divider style={{marginVertical: 10}} />
           <TextInput
-            keyboardType="numeric"
-            label="Dni del cliente"
+            keyboardType='numeric'
+            label='Dni del cliente'
             onChangeText={setDni}
-            mode="outlined"
+            mode='outlined'
             value={dni}
           />
         </Card.Content>
-        <Card.Actions style={{ margin: 15, justifyContent: "center" }}>
+        <Card.Actions style={{margin: 15, justifyContent: 'center'}}>
           <Button
             loading={loadingSave}
             disabled={loadingSave}
-            mode="contained"
-            style={{ width: 300 }}
-            onPress={saveReservation}
-          >
+            mode='contained'
+            style={{width: 300}}
+            onPress={saveReservation}>
             Registrar
           </Button>
         </Card.Actions>
@@ -123,7 +107,7 @@ const ReservationCreatePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   cardContainer: {
     width: width * (5 / 6),

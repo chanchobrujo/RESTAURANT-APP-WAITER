@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { ActivityIndicator } from "react-native-paper";
 
-import { UnitDeliveryContext } from "../context/unitDelivery/UnitDeliveryContext";
+import { UnitDeliveryContext } from "../../context/unitDelivery/UnitDeliveryContext";
 
 interface Props {
   enable: boolean;

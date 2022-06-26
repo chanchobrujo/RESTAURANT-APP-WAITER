@@ -4,8 +4,8 @@ import {Dimensions, Modal, StyleSheet, View} from 'react-native';
 import {Button, Card, Switch, TextInput, Title} from 'react-native-paper';
 
 import {_stompClient} from '../App';
-import PickerBoard from './PickerBoard';
-import PickerDelivery from './PickerDelivery';
+import PickerBoard from './pickers/PickerBoard';
+import PickerDelivery from './pickers/PickerDelivery';
 import {CartContext} from '../context/cart/CartContext';
 import {AuthContext} from '../context/auth/AuthContext';
 

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { ActivityIndicator } from "react-native-paper";
 
-import { BoardContext } from "../context/board/BoardContext";
+import { BoardContext } from "../../context/board/BoardContext";
 
 interface Props {
   value: string;

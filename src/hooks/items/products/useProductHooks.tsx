@@ -9,25 +9,41 @@ export const useItemPaginated = () => {
 
   const [index, setIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [collectionSpeciality, setCollectionSpeciality] = useState<number[]>([]);
   const [collection, setCollection] = useState<ProductResponse[]>([]);
 
-  const getUri = () => `/findByParams?size=4&page=${index}&category=&speciality=`;
+  const getUri = () => `/findByParams?size=10&page=${index}&category=&speciality=`;
 
-  const findAll = async (value: number) => {
-    setLoading(true);
-    try {
-      let destination: string = getUri() + value;
-      let res = await itemsApi.get<ProductResponseCollection>(destination);
-      if (res.data.totalPages > index) {
-        setCollection([...collection, ...res.data.collections]);
-        setIndex(index + 1);
-      }
-    } catch (error) {
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
+  const reload = async (value: number) => {
+    setIndex(0);
+    findAll(value);
   };
 
-  return {loading, collection, findAll};
+  const findAll = async (value: number) => {
+    if (collectionSpeciality.includes(value)) {
+    } else {
+      collectionSpeciality.push(value);
+      setCollectionSpeciality(collectionSpeciality);
+
+      try {
+        setLoading(true);
+        let destination: string = getUri() + value;
+        let res = await itemsApi.get<ProductResponseCollection>(destination);
+
+        console.log(destination);
+        if (res.data.totalPages > index) {
+          setCollection([...collection, ...res.data.collections]);
+          //setIndex(index + 1);
+        }
+      } catch (error) {
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    console.log(collectionSpeciality);
+  };
+
+  return {loading, collection, findAll, reload};
 };

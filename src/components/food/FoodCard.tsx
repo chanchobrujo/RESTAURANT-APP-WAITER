@@ -1,31 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { SERVICE_FILE } from "../../../environment/environment.prod";
-import { ProductResponse } from "../../model/response/entity/ItemResponse";
-import { FadeInImage } from "../FadeInImage";
+import ImageColors from 'react-native-image-colors';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useRef, useState} from 'react';
+import {FILE} from '../../../environment/environment.prod';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import ImageColors from "react-native-image-colors";
-import { useNavigation } from "@react-navigation/native";
+import {FadeInImage} from '../FadeInImage';
+import {ProductResponse} from '../../model/response/entity/ItemResponse';
 
 interface Props {
   food: ProductResponse;
 }
 
-const width = Dimensions.get("window").width;
+const width = Dimensions.get('window').width;
 
-export const FoodCard = ({ food }: Props) => {
-  const [bgColor, setBgColor] = useState("grey");
+export const FoodCard = ({food}: Props) => {
+  const [bgColor, setBgColor] = useState('grey');
   const isMounted = useRef(true);
   const navigation = useNavigation();
 
   useEffect(() => {
-    let image: string = SERVICE_FILE.concat(food.images[0]);
+    let image: string = FILE.concat(food.images[0]);
     ImageColors.getColors(image, {
-      fallback: "grey",
+      fallback: 'grey',
     }).then((color: any) => {
       if (!isMounted.current) return;
-      setBgColor(color.darkVibrant || "grey");
+      setBgColor(color.darkVibrant || 'grey');
     });
 
     return () => {
@@ -36,25 +36,18 @@ export const FoodCard = ({ food }: Props) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={() =>
-        navigation.navigate("FoodDetails", { food, color: bgColor })
-      }
-    >
+      onPress={() => navigation.navigate('FoodDetails', {food, color: bgColor})}>
       <View
         style={{
           ...styles.cardContainer,
           width: width * 0.4,
           backgroundColor: bgColor,
-        }}
-      >
+        }}>
         <View>
           <Text style={styles.nameCard}>{food.names[0]}</Text>
         </View>
 
-        <FadeInImage
-          uri={SERVICE_FILE.concat(food.images[0])}
-          style={styles.foodImage}
-        />
+        <FadeInImage uri={FILE.concat(food.images[0])} style={styles.foodImage} />
       </View>
     </TouchableOpacity>
   );
@@ -68,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 35,
     borderRadius: 5,
 
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 6,
@@ -78,12 +71,12 @@ const styles = StyleSheet.create({
 
     elevation: 15,
 
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   nameCard: {
-    fontWeight: "bold",
-    fontFamily: "Cochin",
-    color: "white",
+    fontWeight: 'bold',
+    fontFamily: 'Cochin',
+    color: 'white',
     fontSize: 15,
     top: 10,
     left: 5,
@@ -91,7 +84,7 @@ const styles = StyleSheet.create({
   foodImage: {
     width: 140,
     height: 120,
-    position: "absolute",
+    position: 'absolute',
     right: -8,
     bottom: -5,
     borderRadius: 10,

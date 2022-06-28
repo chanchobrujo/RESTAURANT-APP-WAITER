@@ -22,6 +22,7 @@ export const authStyles = StyleSheet.create({
   },
   buttonContainer: {alignItems: 'center', marginTop: 50},
   button: {
+    backgroundColor: '#5856D6',
     paddingHorizontal: 20,
     borderColor: 'white',
     paddingVertical: 5,

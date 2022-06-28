@@ -15,8 +15,10 @@ import {useForm} from '../../hooks/UseHooks';
 import {authStyles} from '../../theme/AuthTheme';
 import {Background} from '../../components/Background';
 import {AuthContext} from '../../context/auth/AuthContext';
+import {NotifyContext} from '../../context/notifies/NotifyContext';
 
 const Auth = () => {
+  const {showToastMessage} = useContext(NotifyContext);
   const {signIn, errorMessage, removeError, loading} = useContext(AuthContext);
 
   const {username, password, onChangue} = useForm({
@@ -30,19 +32,9 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    if (errorMessage == null || errorMessage.length === 0) {
-      return;
-    }
+    if (errorMessage == null || errorMessage.length === 0) return;
 
-    Toast.show({
-      type: 'error',
-      position: 'bottom',
-      text2: 'Error de autenticación',
-      text1: errorMessage,
-      visibilityTime: 5000,
-      autoHide: true,
-      bottomOffset: 40,
-    });
+    showToastMessage(false, errorMessage, 'Error de autenticación');
     removeError();
   }, [errorMessage]);
 
@@ -89,11 +81,11 @@ const Auth = () => {
 
           <View style={authStyles.buttonContainer}>
             <Button
-              loading={loading}
-              disabled={loading}
               mode='contained'
-              style={authStyles.button}
-              onPress={onLogin}>
+              loading={loading}
+              onPress={onLogin}
+              disabled={loading}
+              style={authStyles.button}>
               Iniciar sesión
             </Button>
           </View>

@@ -1,9 +1,9 @@
-import Toast from 'react-native-toast-message';
 import {Dimensions, StyleSheet, View, Text} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, Divider, Switch, TextInput} from 'react-native-paper';
 
 import PickerBoard from '../../../components/pickers/PickerBoard';
+import {NotifyContext} from '../../../context/notifies/NotifyContext';
 import PickerDelivery from '../../../components/pickers/PickerDelivery';
 import {ReservationContext} from '../../../context/reservation/ReservationContext';
 import {ReservationByUserRequest} from '../../../model/request/ReservationRequests';
@@ -17,6 +17,8 @@ const ReservationCreatePage = () => {
 
   const {loadingSave, addReservation, message, success, addReservationDelivery} =
     useContext(ReservationContext);
+
+  const {showToastMessage} = useContext(NotifyContext);
 
   const [isDelivery, setIsDelivery] = useState(false);
   const onToggleSwitch = () => setIsDelivery(!isDelivery);
@@ -35,14 +37,7 @@ const ReservationCreatePage = () => {
       return;
     }
 
-    Toast.show({
-      type: success ? 'success' : 'error',
-      position: 'bottom',
-      text1: message,
-      visibilityTime: 5000,
-      autoHide: true,
-      bottomOffset: 40,
-    });
+    showToastMessage(success, message, '');
 
     setDni('');
     setBoard('');

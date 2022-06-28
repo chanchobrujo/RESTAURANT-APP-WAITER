@@ -13,6 +13,7 @@ import {AuthProvider} from './context/auth/AuthContext';
 import {CartProvider} from './context/cart/CartContext';
 import {BoardProvider} from './context/board/BoardContext';
 import {SERVICE_CALL} from '../environment/environment.prod';
+import {NotifyProvider} from './context/notifies/NotifyContext';
 import {ReservationProvider} from './context/reservation/ReservationContext';
 import {UnitDeliveryProvider} from './context/unitDelivery/UnitDeliveryContext';
 
@@ -34,13 +35,15 @@ export const url = SERVICE_CALL.concat('/chat-websocket');
 const AppState = ({children}: any) => {
   return (
     <AuthProvider>
-      <BoardProvider>
-        <UnitDeliveryProvider>
-          <ReservationProvider>
-            <CartProvider>{children}</CartProvider>
-          </ReservationProvider>
-        </UnitDeliveryProvider>
-      </BoardProvider>
+      <NotifyProvider>
+        <BoardProvider>
+          <UnitDeliveryProvider>
+            <ReservationProvider>
+              <CartProvider>{children}</CartProvider>
+            </ReservationProvider>
+          </UnitDeliveryProvider>
+        </BoardProvider>
+      </NotifyProvider>
     </AuthProvider>
   );
 };

@@ -1,4 +1,3 @@
-import Toast from 'react-native-toast-message';
 import React, {useContext, useEffect, useState} from 'react';
 import {Dimensions, Modal, StyleSheet, View} from 'react-native';
 import {Button, Card, Switch, TextInput, Title} from 'react-native-paper';
@@ -7,7 +6,7 @@ import {_stompClient} from '../App';
 import PickerBoard from './pickers/PickerBoard';
 import PickerDelivery from './pickers/PickerDelivery';
 import {CartContext} from '../context/cart/CartContext';
-import {AuthContext} from '../context/auth/AuthContext';
+import {NotifyContext} from '../context/notifies/NotifyContext';
 
 interface Props {
   id: string;
@@ -37,35 +36,25 @@ export const ModalByAddProduct = ({
   color,
   name,
 }: Props) => {
-  const [delivery, setDelivery] = useState('');
-  const [isDelivery, setIsDelivery] = useState(false);
-  const onToggleSwitch = () => setIsDelivery(!isDelivery);
-
-  const {publishMessage} = useContext(AuthContext);
-
+  const {publishMessage, showToastMessage} = useContext(NotifyContext);
   const {addProduct, addProductDelivery, message, success, loadingSave} =
     useContext(CartContext);
 
+  const [delivery, setDelivery] = useState('');
+  const [isDelivery, setIsDelivery] = useState(false);
+
+  const onToggleSwitch = () => setIsDelivery(!isDelivery);
+
   const addProductByUser = () => {
-    if (!isDelivery) {
-      addProduct(board, id, parseInt(quantity));
-      publishMessage({board, food: name, quantity: parseInt(quantity)});
-    } else {
-      addProductDelivery(delivery, id, parseInt(quantity));
-    }
+    if (!isDelivery) addProduct(board, id, parseInt(quantity));
+    else addProductDelivery(delivery, id, parseInt(quantity));
   };
 
   useEffect(() => {
     if (message == null || message.length === 0) return;
+    if (success) publishMessage({board, food: name, quantity: parseInt(quantity)});
 
-    Toast.show({
-      text1: message,
-      autoHide: true,
-      bottomOffset: 40,
-      position: 'bottom',
-      visibilityTime: 5000,
-      type: success ? 'success' : 'error',
-    });
+    showToastMessage(success, message, '');
 
     setQuantity('1');
     setBoard('');

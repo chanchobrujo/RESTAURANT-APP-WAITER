@@ -20,8 +20,7 @@ export const useItemPaginated = () => {
   };
 
   const findAll = async (value: number) => {
-    if (collectionSpeciality.includes(value)) {
-    } else {
+    if (!collectionSpeciality.includes(value)) {
       collectionSpeciality.push(value);
       setCollectionSpeciality(collectionSpeciality);
 
@@ -30,7 +29,6 @@ export const useItemPaginated = () => {
         let destination: string = getUri() + value;
         let res = await itemsApi.get<ProductResponseCollection>(destination);
 
-        console.log(destination);
         if (res.data.totalPages > index) {
           setCollection([...collection, ...res.data.collections]);
           //setIndex(index + 1);
@@ -41,8 +39,6 @@ export const useItemPaginated = () => {
         setLoading(false);
       }
     }
-
-    console.log(collectionSpeciality);
   };
 
   return {loading, collection, findAll, reload};

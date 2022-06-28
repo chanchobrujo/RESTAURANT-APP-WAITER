@@ -1,17 +1,12 @@
-import SockJS from 'sockjs-client';
-import notifee from '@notifee/react-native';
-import {IMessage, IPublishParams} from '@stomp/stompjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {createContext, useEffect, useReducer, useState} from 'react';
 
+import {_stompClient} from '../../App';
 import {apisAuth} from '../../api/AuthApi';
-import {url, _stompClient} from '../../App';
 import {authReducer, AuthState} from './AuthReducer';
-import {Notify} from '../../model/response/NotifyCookResponse';
 import {SignInRequest} from '../../model/request/SignInRequest';
 import {SignInResponse} from '../../model/response/SignInResponse';
 import {UserResponse} from '../../model/response/entity/UserResponse';
-import {NotifyCookRequest} from '../../model/request/NotifyCookRequest';
 import {VerifyTokenResponse} from '../../model/response/VerifyTokenResponse';
 
 type AuthContextProps = {
@@ -19,27 +14,27 @@ type AuthContextProps = {
   token: string | null;
   status: 'checking' | 'authenticated' | 'not-authenticated';
 
-  publishMessage: (request: NotifyCookRequest) => void;
-  myProfileData: () => void;
-  signIn: (request: SignInRequest) => void;
+  loading: boolean;
   logOut: () => void;
   removeError: () => void;
   myPersonalData: UserResponse;
-  loading: boolean;
+  signIn: (request: SignInRequest) => void;
 };
 
 const authInitialState: AuthState = {
-  status: 'checking',
   token: null,
   mydata: null,
   errorMessage: '',
+  status: 'checking',
 };
 
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({children}: any) => {
-  const {authApi, profileApi} = apisAuth();
+  const {authApi, profileApi, reload} = apisAuth();
 
+  const [loading, setloading] = useState(false);
+  const [state, dispatch] = useReducer(authReducer, authInitialState);
   const [myPersonalData, setMyPorsonalData] = useState<UserResponse>({
     id: '',
     dni: '',
@@ -52,58 +47,23 @@ export const AuthProvider = ({children}: any) => {
     role: '',
     specialty: '',
   });
-  const [loading, setloading] = useState(false);
-  const [state, dispatch] = useReducer(authReducer, authInitialState);
 
   useEffect(() => {
     verifyToken();
-    myProfileData();
   }, []);
 
-  const sendNotify = (body: string) => {
-    const notify: Notify = JSON.parse(body) as Notify;
+  const myProfileData = async () => {
+    reload();
+    const token: string = (await AsyncStorage.getItem('token')) || '';
 
-    let bodyValue: string =
-      'Plato: ' + notify.food + ', ' + notify.quantity + ', ' + notify.time;
+    try {
+      const response = await profileApi.get<UserResponse>('');
+      setMyPorsonalData(response.data);
 
-    async function onDisplayNotification() {
-      const channelId = await notifee.createChannel({
-        id: notify.id + '',
-        name: 'Default Channel',
-      });
-      await notifee.displayNotification({
-        title: 'Mesa: ' + notify.board,
-        body: bodyValue,
-        android: {channelId},
-      });
+      dispatch({type: 'signUp', payload: {token, me: response.data}});
+    } catch (error: any) {
+      return dispatch({type: 'notAuthenticated'});
     }
-    onDisplayNotification();
-  };
-
-  _stompClient.activate();
-  _stompClient.configure({
-    brokerURL: url,
-    reconnectDelay: 500,
-    heartbeatIncoming: 4000,
-    heartbeatOutgoing: 4000,
-    logRawCommunication: false,
-    webSocketFactory: () => SockJS(url),
-
-    onConnect: async () => {
-      try {
-        const endpoint: string = '/notify/deliver/' + myPersonalData.specialty;
-        _stompClient.subscribe(endpoint, (e: IMessage) => sendNotify(e.body));
-      } catch (error) {}
-    },
-  });
-
-  const publishMessage = async (message: NotifyCookRequest) => {
-    const body: string = JSON.stringify(message);
-    const response = await profileApi.get<UserResponse>('');
-    const destination: string = '/app/food/' + response.data.specialty;
-
-    const send: IPublishParams = {destination, body};
-    _stompClient.publish(send);
   };
 
   const verifyToken = async () => {
@@ -112,40 +72,25 @@ export const AuthProvider = ({children}: any) => {
     try {
       const response = await authApi.post<VerifyTokenResponse>('/verify');
       await AsyncStorage.setItem('token', response.data.token);
-      dispatch({type: 'signUp', payload: {token: response.data.token}});
+
+      myProfileData();
     } catch (error: any) {
       return dispatch({type: 'notAuthenticated'});
     }
   };
 
-  const myProfileData = async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (!token) return dispatch({type: 'notAuthenticated'});
-    try {
-      const response = await profileApi.get<UserResponse>('');
-      setMyPorsonalData(response.data);
-
-      dispatch({type: 'myData', payload: {mydata: response.data}});
-    } catch (error: any) {}
-  };
-
   const signIn = async ({username, password}: SignInRequest) => {
     try {
       setloading(true);
-      const response = await authApi.post<SignInResponse>('/ForWaiter', {
-        username,
-        password,
-      });
+      const request: SignInRequest = {username, password};
+      const response = await authApi.post<SignInResponse>('/ForWaiter', request);
       let token: string = response.data.token;
+      AsyncStorage.setItem('token', token);
 
-      dispatch({type: 'signUp', payload: {token: token}});
-      await AsyncStorage.setItem('token', token);
-
-      setloading(false);
+      myProfileData();
     } catch (error: any) {
-      const message = error.response.data.message;
-
-      dispatch({type: 'addError', payload: message});
+      dispatch({type: 'addError', payload: error.response.data.message});
+    } finally {
       setloading(false);
     }
   };
@@ -153,6 +98,7 @@ export const AuthProvider = ({children}: any) => {
   const logOut = async () => {
     setloading(true);
     await AsyncStorage.removeItem('token');
+    _stompClient.deactivate();
     setloading(false);
     dispatch({type: 'logout'});
   };
@@ -165,11 +111,9 @@ export const AuthProvider = ({children}: any) => {
     <AuthContext.Provider
       value={{
         ...state,
-        myProfileData,
         signIn,
         logOut,
         removeError,
-        publishMessage,
         loading,
         myPersonalData,
       }}>

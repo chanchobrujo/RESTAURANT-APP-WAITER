@@ -1,19 +1,19 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
-import { FadeInImage } from "../FadeInImage";
-import { SERVICE_FILE } from "../../../environment/environment.prod";
-import { ProductResponse } from "../../model/response/entity/ItemResponse";
+import {FadeInImage} from '../FadeInImage';
+import {FILE} from '../../../environment/environment.prod';
+import {ProductResponse} from '../../model/response/entity/ItemResponse';
 
 interface Props {
   item: ProductResponse;
 }
 
-export const FoodDetailComponent = ({ item }: Props) => {
+export const FoodDetailComponent = ({item}: Props) => {
   return (
-    <ScrollView style={{ ...StyleSheet.absoluteFillObject }}>
-      <View style={{ ...style.container, marginTop: 450 }}>
+    <ScrollView style={{...StyleSheet.absoluteFillObject}}>
+      <View style={{...style.container, marginTop: 450}}>
         <Text style={style.title}>Categoria: </Text>
         <Text style={style.regularText}>{item.category}</Text>
 
@@ -32,11 +32,7 @@ export const FoodDetailComponent = ({ item }: Props) => {
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {item.images.map((value, i) => (
-          <FadeInImage
-            key={i}
-            uri={SERVICE_FILE.concat(value)}
-            style={style.basicSprite}
-          />
+          <FadeInImage key={i} uri={FILE.concat(value)} style={style.basicSprite} />
         ))}
       </ScrollView>
     </ScrollView>
@@ -44,9 +40,9 @@ export const FoodDetailComponent = ({ item }: Props) => {
 };
 
 const style = StyleSheet.create({
-  container: { marginHorizontal: 20 },
-  title: { fontSize: 20, fontWeight: "bold", color: "black", marginTop: 7 },
-  regularText: { fontSize: 19, color: "grey" },
+  container: {marginHorizontal: 20},
+  title: {fontSize: 20, fontWeight: 'bold', color: 'black', marginTop: 7},
+  regularText: {fontSize: 19, color: 'grey'},
   basicSprite: {
     width: 100,
     height: 100,

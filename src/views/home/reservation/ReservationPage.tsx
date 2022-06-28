@@ -1,45 +1,31 @@
-import { ActivityIndicator } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useContext, useEffect, useState } from "react";
-import { FlatList, StyleSheet, RefreshControl } from "react-native";
+import {FlatList, StyleSheet} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {ActivityIndicator} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-import { ReservationCard } from "../../../components/reservation/ReservationCard";
-import { ReservationContext } from "../../../context/reservation/ReservationContext";
-import { ReservationResponse } from "../../../model/response/entity/ReservationResponse";
+import {ReservationCard} from '../../../components/reservation/ReservationCard';
+import {ReservationContext} from '../../../context/reservation/ReservationContext';
+import {ReservationResponse} from '../../../model/response/entity/ReservationResponse';
 
 const Reservation = () => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const { loading, findAll, collection } = useContext(ReservationContext);
+  const {loading, collection, findAll} = useContext(ReservationContext);
 
   useEffect(() => {
     findAll();
   }, []);
 
-  const findAllFromBackend = async () => {
-    setIsRefreshing(true);
-    await findAll();
-    setIsRefreshing(false);
-  };
-
   return (
     <SafeAreaView style={style.container}>
       <FlatList
-        data={collection}
         numColumns={1}
+        data={collection}
         keyExtractor={(item: ReservationResponse) => item.id}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <ReservationCard reservation={item} />}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={findAllFromBackend}
-          />
-        }
-        onEndReached={() => findAll()}
+        renderItem={({item}) => <ReservationCard reservation={item} />}
+        onEndReached={findAll}
         ListFooterComponent={
           loading ? (
-            <ActivityIndicator style={{ height: 30 }} size={20} color="grey" />
+            <ActivityIndicator style={{height: 30}} size={20} color='grey' />
           ) : (
             <></>
           )
@@ -52,8 +38,8 @@ const Reservation = () => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default Reservation;

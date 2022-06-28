@@ -1,13 +1,13 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, {createContext, useReducer, useState} from 'react';
 
-import { apis } from "../../api/CartApi";
-import { CartReducer, CartState } from "./CartReducer";
+import {apis} from '../../api/CartApi';
+import {CartReducer, CartState} from './CartReducer';
 import {
   AddProducRequest,
   AddProductInDelivery,
-} from "../../model/request/AddProducRequest";
-import { CartResponse } from "../../model/response/entity/CartResponse";
-import { DeleteCartByUser } from "../../model/request/DeleteCartByUser";
+} from '../../model/request/AddProducRequest';
+import {CartResponse} from '../../model/response/entity/CartResponse';
+import {DeleteCartByUser} from '../../model/request/DeleteCartByUser';
 
 type CartContextProps = {
   success: boolean;
@@ -17,25 +17,21 @@ type CartContextProps = {
   collection: CartResponse[];
 
   findAll: (id: string) => void;
-  addProductDelivery: (
-    delivery: string,
-    product: string,
-    quantity: number
-  ) => void;
+  addProductDelivery: (delivery: string, product: string, quantity: number) => void;
   addProduct: (board: string, product: string, quantity: number) => void;
   removeProduct: (idLineReservation: string, product: string) => void;
 };
 
 const initialState: CartState = {
-  status: "checking",
+  status: 'checking',
   success: true,
-  message: "",
+  message: '',
 };
 
 export const CartContext = createContext({} as CartContextProps);
 
-export const CartProvider = ({ children }: any) => {
-  const { cart } = apis();
+export const CartProvider = ({children}: any) => {
+  const {cart} = apis();
   const [loadingSave, setLoadingSave] = useState(false);
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState<CartResponse[]>([]);
@@ -59,37 +55,34 @@ export const CartProvider = ({ children }: any) => {
   const addProductDelivery = async (
     delivery: string,
     product: string,
-    quantity: number
+    quantity: number,
   ) => {
     setLoadingSave(true);
     try {
-      const request: AddProductInDelivery = { delivery, product, quantity };
-      const response = await cart.post("/addProductInDelivery", request);
+      const request: AddProductInDelivery = {delivery, product, quantity};
+      const response = await cart.post('/addProductInDelivery', request);
 
-      dispatch({ type: "messageResponse", payload: response.data.message });
+      dispatch({type: 'messageResponse', payload: response.data.message});
     } catch (error: any) {
-      dispatch({ type: "addError", payload: error.response.data.message });
+      dispatch({type: 'addError', payload: error.response.data.message});
     } finally {
-      dispatch({ type: "removeError" });
+      dispatch({type: 'removeError'});
       setLoadingSave(false);
     }
   };
 
-  const addProduct = async (
-    board: string,
-    product: string,
-    quantity: number
-  ) => {
+  const addProduct = async (board: string, product: string, quantity: number) => {
     setLoadingSave(true);
     try {
-      const request: AddProducRequest = { board, product, quantity };
-      const response = await cart.post("/addProductInBoard", request);
+      const request: AddProducRequest = {board, product, quantity};
+      const response = await cart.post('/addProductInBoard', request);
 
-      dispatch({ type: "messageResponse", payload: response.data.message });
+      dispatch({type: 'messageResponse', payload: response.data.message});
+      
     } catch (error: any) {
-      dispatch({ type: "addError", payload: error.response.data.message });
+      dispatch({type: 'addError', payload: error.response.data.message});
     } finally {
-      dispatch({ type: "removeError" });
+      dispatch({type: 'removeError'});
       setLoadingSave(false);
     }
   };
@@ -97,14 +90,14 @@ export const CartProvider = ({ children }: any) => {
   const removeProduct = async (idLineReservation: string, product: string) => {
     setLoadingSave(true);
     try {
-      const request: DeleteCartByUser = { idLineReservation, product };
-      const response = await cart.post("/deleteCartByUser", request);
+      const request: DeleteCartByUser = {idLineReservation, product};
+      const response = await cart.post('/deleteCartByUser', request);
 
-      dispatch({ type: "messageResponse", payload: response.data.message });
+      dispatch({type: 'messageResponse', payload: response.data.message});
     } catch (error: any) {
-      dispatch({ type: "addError", payload: error.response.data.message });
+      dispatch({type: 'addError', payload: error.response.data.message});
     } finally {
-      dispatch({ type: "removeError" });
+      dispatch({type: 'removeError'});
       setLoadingSave(false);
     }
   };
@@ -122,8 +115,7 @@ export const CartProvider = ({ children }: any) => {
         addProductDelivery,
 
         removeProduct,
-      }}
-    >
+      }}>
       {children}
     </CartContext.Provider>
   );

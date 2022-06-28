@@ -1,13 +1,13 @@
-import React, { createContext, useEffect, useReducer, useState } from "react";
+import React, {createContext, useReducer, useState} from 'react';
 
-import { apis } from "../../api/ReservationApi";
-import { reservationReducer, ReservationState } from "./ReservationReducer";
-import { ReservationResponse } from "../../model/response/entity/ReservationResponse";
+import {apis} from '../../api/ReservationApi';
+import {reservationReducer, ReservationState} from './ReservationReducer';
+import {ReservationResponse} from '../../model/response/entity/ReservationResponse';
 import {
   ReservationByUserRequest,
   ReservationDeliveryByUserRequest,
-} from "../../model/request/ReservationRequests";
-import { ReservationResponseCollection } from "../../model/response/retrive/ReservationResponseCollection";
+} from '../../model/request/ReservationRequests';
+import {ReservationResponseCollection} from '../../model/response/retrive/ReservationResponseCollection';
 
 type ReservationContextProps = {
   success: boolean;
@@ -16,7 +16,7 @@ type ReservationContextProps = {
   loadingSave: boolean;
   collection: ReservationResponse[];
   findAll: () => void;
-  addReservation: ({ dni, name }: ReservationByUserRequest) => void;
+  addReservation: ({dni, name}: ReservationByUserRequest) => void;
   addReservationDelivery: ({
     dni,
     unit_delivery,
@@ -24,15 +24,15 @@ type ReservationContextProps = {
 };
 
 const initialState: ReservationState = {
-  status: "checking",
+  status: 'checking',
   success: true,
-  message: "",
+  message: '',
 };
 
 export const ReservationContext = createContext({} as ReservationContextProps);
 
-export const ReservationProvider = ({ children }: any) => {
-  const { reservation } = apis();
+export const ReservationProvider = ({children}: any) => {
+  const {reservation} = apis();
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
@@ -42,20 +42,17 @@ export const ReservationProvider = ({ children }: any) => {
 
   const getUri = () => `?size=4&page=${index}`;
 
-  const addReservation = async ({ dni, name }: ReservationByUserRequest) => {
+  const addReservation = async ({dni, name}: ReservationByUserRequest) => {
     setLoadingSave(true);
 
     try {
-      const response = await reservation.post("/reserveByUser", {
-        name: name,
-        dni: dni,
-      });
+      const response = await reservation.post('/reserveByUser', {name, dni});
 
-      dispatch({ type: "messageResponse", payload: response.data.message });
+      dispatch({type: 'messageResponse', payload: response.data.message});
     } catch (error: any) {
-      dispatch({ type: "addError", payload: error.response.data.message });
+      dispatch({type: 'addError', payload: error.response.data.message});
     } finally {
-      dispatch({ type: "removeError" });
+      dispatch({type: 'removeError'});
       setLoadingSave(false);
     }
   };
@@ -66,16 +63,14 @@ export const ReservationProvider = ({ children }: any) => {
   }: ReservationDeliveryByUserRequest) => {
     setLoadingSave(true);
     try {
-      const response = await reservation.post("/reserveDeliveryByUser", {
-        unit_delivery,
-        dni,
-      });
+      const request: ReservationDeliveryByUserRequest = {dni, unit_delivery};
+      const response = await reservation.post('/reserveDeliveryByUser', request);
 
-      dispatch({ type: "messageResponse", payload: response.data.message });
+      dispatch({type: 'messageResponse', payload: response.data.message});
     } catch (error: any) {
-      dispatch({ type: "addError", payload: error.response.data.message });
+      dispatch({type: 'addError', payload: error.response.data.message});
     } finally {
-      dispatch({ type: "removeError" });
+      dispatch({type: 'removeError'});
       setLoadingSave(false);
     }
   };
@@ -96,10 +91,6 @@ export const ReservationProvider = ({ children }: any) => {
     }
   };
 
-  useEffect(() => {
-    findAll();
-  }, []);
-
   return (
     <ReservationContext.Provider
       value={{
@@ -110,8 +101,7 @@ export const ReservationProvider = ({ children }: any) => {
         findAll,
         addReservation,
         addReservationDelivery,
-      }}
-    >
+      }}>
       {children}
     </ReservationContext.Provider>
   );

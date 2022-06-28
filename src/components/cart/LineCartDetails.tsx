@@ -1,23 +1,21 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Button, Card, Paragraph, Title} from 'react-native-paper';
 
-import {CartContext} from '../../context/cart/CartContext';
-import {SERVICE_FILE} from '../../../environment/environment.prod';
-import {LineCart} from '../../model/response/entity/CartResponse';
 import {_stompClient} from '../../App';
+import {CartContext} from '../../context/cart/CartContext';
+import {FILE} from '../../../environment/environment.prod';
+import {LineCart} from '../../model/response/entity/CartResponse';
 
 interface Props {
   line: LineCart;
   id: string;
-  board: string;
 }
 
-export const LineCartDetails = ({line, id, board}: Props) => {
+export const LineCartDetails = ({line, id}: Props) => {
   const {removeProduct} = React.useContext(CartContext);
 
   const deleteProduct = () => {
     removeProduct(id, line.product.cod);
-    //componentDidMount();
   };
 
   return (
@@ -28,7 +26,7 @@ export const LineCartDetails = ({line, id, board}: Props) => {
         width: 220,
       }}>
       <Card.Title title={line.product.names[1]} />
-      <Card.Cover source={{uri: SERVICE_FILE.concat(line.product.images[0])}} />
+      <Card.Cover source={{uri: FILE.concat(line.product.images[0])}} />
       <Card.Content>
         <Title>{'Precio:' + line.product.price}</Title>
         <Paragraph>{'Cantidad a llevar' + line.quantity}</Paragraph>

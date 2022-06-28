@@ -7,5 +7,11 @@ export const apisAuth = () => {
 
   builderAuthoriesByStorage(authApi);
   builderAuthoriesByStorage(profileApi);
-  return {authApi, profileApi};
+
+  const reload = async () => {
+    builderAuthoriesByStorage(authApi);
+    builderAuthoriesByStorage(profileApi);
+  };
+
+  return {authApi, profileApi, reload};
 };

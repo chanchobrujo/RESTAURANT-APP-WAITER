@@ -4,18 +4,19 @@ import {ActivityIndicator, StyleSheet, View, FlatList} from 'react-native';
 import {specialityApis} from '../../../api/SpecialityApi';
 import {FoodCard} from '../../../components/food/FoodCard';
 import {AuthContext} from '../../../context/auth/AuthContext';
+import {NotifyContext} from '../../../context/notifies/NotifyContext';
 import PickerSpeciality from '../../../components/pickers/PickerSpeciality';
 import {ProductResponse} from '../../../model/response/entity/ItemResponse';
 import {useItemPaginated} from '../../../hooks/items/products/useProductHooks';
 import {SpecialtyResponse} from '../../../model/response/entity/SpecialtyResponse';
 
 const FoodMenu = () => {
-  const {myPersonalData} = useContext(AuthContext);
   const {specialityApi} = specialityApis();
+  const {myPersonalData} = useContext(AuthContext);
+  const {startNotifiesServices} = useContext(NotifyContext);
+  const {loading, collection, findAll, reload} = useItemPaginated();
 
   const [speciality, setSpeciality] = useState<number>(0);
-
-  const {loading, collection, findAll, reload} = useItemPaginated();
 
   useEffect(() => {
     setSpeciality(speciality);
@@ -23,6 +24,7 @@ const FoodMenu = () => {
   }, [speciality]);
 
   useEffect(() => {
+    startNotifiesServices();
     let endpoint: string = `/findByName?name=${myPersonalData.specialty}`;
 
     async function fetchData() {

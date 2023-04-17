@@ -38,13 +38,12 @@ export const CartProvider = ({children}: any) => {
 
   const [state, dispatch] = useReducer(CartReducer, initialState);
 
-  const getURI = (id: string) => `/retriveCartByReservation?reservation=${id}`;
+  const getURI = (id: string) => `/retrieveCartByReservation?reservation=${id}`;
 
   const findAll = async (id: string) => {
     setLoading(true);
     try {
       const response = await cart.get<CartResponse[]>(getURI(id));
-
       setCollection(response.data);
     } catch (error: any) {
     } finally {
@@ -78,7 +77,7 @@ export const CartProvider = ({children}: any) => {
       const response = await cart.post('/addProductInBoard', request);
 
       dispatch({type: 'messageResponse', payload: response.data.message});
-      
+
     } catch (error: any) {
       dispatch({type: 'addError', payload: error.response.data.message});
     } finally {

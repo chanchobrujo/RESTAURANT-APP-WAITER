@@ -1,12 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  View,
-  TextInput,
-} from 'react-native';
+import {Keyboard, KeyboardAvoidingView, Platform, Text, View, TextInput} from 'react-native';
 import {Button} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
@@ -22,7 +15,7 @@ const Auth = () => {
   const {signIn, errorMessage, removeError, loading} = useContext(AuthContext);
 
   const {username, password, onChangue} = useForm({
-    username: 'JOS7C802F',
+    username: 'IRM9090E8',
     password: 'kevin12345@',
   });
 
@@ -42,9 +35,7 @@ const Auth = () => {
     <>
       <Background />
 
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={authStyles.formContainer}>
           <Logo />
 
@@ -80,12 +71,7 @@ const Auth = () => {
           />
 
           <View style={authStyles.buttonContainer}>
-            <Button
-              mode='contained'
-              loading={loading}
-              onPress={onLogin}
-              disabled={loading}
-              style={authStyles.button}>
+            <Button mode='contained' loading={loading} onPress={onLogin} disabled={loading} style={authStyles.button}>
               Iniciar sesión
             </Button>
           </View>

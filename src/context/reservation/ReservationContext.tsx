@@ -3,10 +3,7 @@ import React, {createContext, useReducer, useState} from 'react';
 import {apis} from '../../api/ReservationApi';
 import {reservationReducer, ReservationState} from './ReservationReducer';
 import {ReservationResponse} from '../../model/response/entity/ReservationResponse';
-import {
-  ReservationByUserRequest,
-  ReservationDeliveryByUserRequest,
-} from '../../model/request/ReservationRequests';
+import {ReservationByUserRequest, ReservationDeliveryByUserRequest} from '../../model/request/ReservationRequests';
 import {ReservationResponseCollection} from '../../model/response/retrive/ReservationResponseCollection';
 
 type ReservationContextProps = {
@@ -17,10 +14,7 @@ type ReservationContextProps = {
   collection: ReservationResponse[];
   findAll: () => void;
   addReservation: ({dni, name}: ReservationByUserRequest) => void;
-  addReservationDelivery: ({
-    dni,
-    unit_delivery,
-  }: ReservationDeliveryByUserRequest) => void;
+  addReservationDelivery: ({dni, unit_delivery}: ReservationDeliveryByUserRequest) => void;
 };
 
 const initialState: ReservationState = {
@@ -57,12 +51,10 @@ export const ReservationProvider = ({children}: any) => {
     }
   };
 
-  const addReservationDelivery = async ({
-    dni,
-    unit_delivery,
-  }: ReservationDeliveryByUserRequest) => {
+  const addReservationDelivery = async ({dni, unit_delivery}: ReservationDeliveryByUserRequest) => {
     setLoadingSave(true);
     try {
+      // HEY
       const request: ReservationDeliveryByUserRequest = {dni, unit_delivery};
       const response = await reservation.post('/reserveDeliveryByUser', request);
 

@@ -2,7 +2,7 @@ export interface BoardResponse {
   id: number;
   name: string;
   image: string;
-  environment?: string;
+  env?: string;
   seating: number;
   details: Details;
 }

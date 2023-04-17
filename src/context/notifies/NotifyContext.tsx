@@ -1,13 +1,15 @@
 import SockJS from 'sockjs-client';
 import {IMessage} from '@stomp/stompjs';
-import notifee from '@notifee/react-native';
+import notifee, {EventType, NotificationAndroid} from '@notifee/react-native';
 import React, {createContext, useContext} from 'react';
-import Toast, {ToastShowParams} from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 import {url, _stompClient} from '../../App';
 import {AuthContext} from '../auth/AuthContext';
 import {Notify} from '../../model/response/NotifyCookResponse';
 import {NotifyCookRequest} from '../../model/request/NotifyCookRequest';
+import {useNavigation} from '@react-navigation/native';
+import {Vibration} from 'react-native';
 
 type NotifyContextProps = {
   startNotifiesServices: () => void;
@@ -19,9 +21,7 @@ const buildMessage = (notify: Notify): string => {
   const sep: string = ', ';
   const index: string = 'Plato: ';
 
-  let body: string = index
-    .concat(notify.food, sep, notify.quantity.toString(), sep)
-    .concat(notify.time);
+  let body: string = index.concat(notify.food, sep, notify.quantity.toString(), sep).concat(notify.time);
 
   return body;
 };
@@ -36,7 +36,18 @@ const sendNotify = (_body: string) => {
 
   async function onDisplayNotification() {
     const channelId = await notifee.createChannel({id, name});
-    const android: object = {channelId};
+    const android: NotificationAndroid = {
+      channelId,
+      actions: [
+        {
+          title: 'gaaaa',
+          icon: 'https://my-cdn.com/icons/snooze.png',
+          pressAction: {
+            id: 'gaaaa',
+          },
+        },
+      ],
+    };
     await notifee.displayNotification({title, body, android});
   }
   onDisplayNotification();
@@ -44,6 +55,7 @@ const sendNotify = (_body: string) => {
 
 export const NotifyContext = createContext({} as NotifyContextProps);
 export const NotifyProvider = ({children}: any) => {
+  const navigation = useNavigation();
   const {myPersonalData} = useContext(AuthContext);
 
   const publishMessage = async (message: NotifyCookRequest) => {
@@ -53,7 +65,15 @@ export const NotifyProvider = ({children}: any) => {
     _stompClient.publish({destination, body});
   };
 
+  notifee.onForegroundEvent(async ({type, detail}) => {
+    if (type === EventType.ACTION_PRESS && detail?.pressAction?.id === 'gaaaa') {
+      Vibration.vibrate(10 * 40);
+      showToastMessage(true, '', '');
+    }
+  });
+
   const startNotifiesServices = () => {
+    sendNotify('{"id":0, "speciality": "speciality", "food":"", "board":"board", "quantity": 4, "time": "jueves "}');
     const endpoint: string = '/notify/deliver/' + myPersonalData.specialty;
 
     _stompClient.activate();
@@ -78,10 +98,5 @@ export const NotifyProvider = ({children}: any) => {
     Toast.show({type, text2, text1});
   };
 
-  return (
-    <NotifyContext.Provider
-      value={{startNotifiesServices, publishMessage, showToastMessage}}>
-      {children}
-    </NotifyContext.Provider>
-  );
+  return <NotifyContext.Provider value={{startNotifiesServices, publishMessage, showToastMessage}}>{children}</NotifyContext.Provider>;
 };

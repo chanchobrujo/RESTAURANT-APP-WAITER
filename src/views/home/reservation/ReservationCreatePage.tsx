@@ -15,8 +15,7 @@ const ReservationCreatePage = () => {
   const [unit_delivery, setDelivery] = useState('');
   const [board, setBoard] = useState('');
 
-  const {loadingSave, addReservation, message, success, addReservationDelivery} =
-    useContext(ReservationContext);
+  const {loadingSave, addReservation, message, success, addReservationDelivery} = useContext(ReservationContext);
 
   const {showToastMessage} = useContext(NotifyContext);
 
@@ -56,41 +55,21 @@ const ReservationCreatePage = () => {
             }}>
             <Text>Es delivery?</Text>
             <Text> {isDelivery ? 'Si' : 'No'} </Text>
-            <Switch
-              color='blue'
-              value={isDelivery}
-              onValueChange={onToggleSwitch}
-              style={{width: 90}}
-            />
+            <Switch color='blue' value={isDelivery} onValueChange={onToggleSwitch} style={{width: 90}} />
           </View>
 
           <Divider style={{marginVertical: 10}} />
           {isDelivery ? (
-            <PickerDelivery
-              enable={true}
-              value={unit_delivery}
-              onChangeValue={setDelivery}
-            />
+            <PickerDelivery enable={true} value={unit_delivery} onChangeValue={setDelivery} />
           ) : (
             <PickerBoard value={board} onChangeValue={setBoard} />
           )}
 
           <Divider style={{marginVertical: 10}} />
-          <TextInput
-            keyboardType='numeric'
-            label='Dni del cliente'
-            onChangeText={setDni}
-            mode='outlined'
-            value={dni}
-          />
+          <TextInput keyboardType='numeric' label='Dni del cliente' onChangeText={setDni} mode='outlined' value={dni} />
         </Card.Content>
         <Card.Actions style={{margin: 15, justifyContent: 'center'}}>
-          <Button
-            loading={loadingSave}
-            disabled={loadingSave}
-            mode='contained'
-            style={{width: 300}}
-            onPress={saveReservation}>
+          <Button loading={loadingSave} disabled={loadingSave} mode='contained' style={{width: 300}} onPress={saveReservation}>
             Registrar
           </Button>
         </Card.Actions>

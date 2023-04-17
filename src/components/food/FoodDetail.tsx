@@ -26,7 +26,8 @@ export const FoodDetailComponent = ({item}: Props) => {
         <Text style={style.regularText}>{item.stock}</Text>
       </View>
 
-      <View style={style.container}>
+      {/**
+         <View style={style.container}>
         <Text style={style.title}>Imagenes: </Text>
       </View>
 
@@ -35,6 +36,7 @@ export const FoodDetailComponent = ({item}: Props) => {
           <FadeInImage key={i} uri={FILE.concat(value)} style={style.basicSprite} />
         ))}
       </ScrollView>
+         */}
     </ScrollView>
   );
 };

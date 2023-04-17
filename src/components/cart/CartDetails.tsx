@@ -29,8 +29,9 @@ export const CartDetails = ({cart, board}: Props) => {
               <Icon name='sad-outline' size={30} />
             </>
           ) : (
-            cart.collection.map((line, i) => (
-              <LineCartDetails key={i} id={cart.idLineRes} line={line} board={board} />
+            cart.collection
+              .map((line, i) => (
+              <LineCartDetails key={i} id={cart.idLineRes} line={line} />
             ))
           )}
         </ScrollView>

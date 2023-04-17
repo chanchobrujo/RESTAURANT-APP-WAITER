@@ -1,8 +1,7 @@
 import {builderApi} from './utilsApi';
-import {SERVICE_CALL} from '../../environment/environment.prod';
+import {SERVICE_RESOURCES} from '../../environment/environment.prod';
 
 export const apis = () => {
-  //occupied
-  const deliveryUnit = builderApi(SERVICE_CALL, '/deliveryUnitRetrive');
+  const deliveryUnit = builderApi(SERVICE_RESOURCES, '/retrieve/unit-delivery/');
   return {deliveryUnit};
 };

@@ -6,6 +6,7 @@ export interface CartResponse {
   total: number;
   customer?: string;
   dateCreated: string;
+  estado: string;
   collection: LineCart[];
 }
 

@@ -59,7 +59,7 @@ export const CartProvider = ({children}: any) => {
     setLoadingSave(true);
     try {
       const request: AddProductInDelivery = {delivery, product, quantity};
-      const response = await cart.post('/addProductInDelivery', request);
+      const response = await cart.post('/addProductToCartInDeliveryUnit', request);
 
       dispatch({type: 'messageResponse', payload: response.data.message});
     } catch (error: any) {
@@ -74,10 +74,8 @@ export const CartProvider = ({children}: any) => {
     setLoadingSave(true);
     try {
       const request: AddProducRequest = {board, product, quantity};
-      const response = await cart.post('/addProductInBoard', request);
-
+      const response = await cart.post('/addProductToCartInBoard', request);
       dispatch({type: 'messageResponse', payload: response.data.message});
-
     } catch (error: any) {
       dispatch({type: 'addError', payload: error.response.data.message});
     } finally {

@@ -1,68 +1,56 @@
-import React, { useContext, useEffect } from "react";
+import React, {useContext, useEffect} from 'react';
+import {Keyboard, KeyboardAvoidingView, Platform, Text, View, TextInput} from 'react-native';
+import {Button} from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  View,
-} from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { StackScreenProps } from "@react-navigation/stack";
+import {Logo} from '../../components/Logo';
+import {useForm} from '../../hooks/UseHooks';
+import {authStyles} from '../../theme/AuthTheme';
+import {Background} from '../../components/Background';
+import {AuthContext} from '../../context/auth/AuthContext';
+import {NotifyContext} from '../../context/notifies/NotifyContext';
 
-import { Logo } from "../../components/Logo";
-import { authStyles } from "../../theme/AuthTheme";
-import { Background } from "../../components/Background";
-import { useForm } from "../../hooks/UseHooks";
-import { AuthContext } from "../../context/AuthContext";
+const Auth = () => {
+  const {showToastMessage} = useContext(NotifyContext);
+  const {signIn, errorMessage, removeError, loading} = useContext(AuthContext);
 
-interface Props extends StackScreenProps<any, any> {}
-
-const Auth = ({ navigation }: Props) => {
-  const { signIn, errorMessage, removeError } = useContext(AuthContext);
-
-  const { username, password, onChangue } = useForm({
-    username: "KEVIND4B60B",
-    password: "kevin12345@",
+  const {username, password, onChangue} = useForm({
+    username: 'IRM9090E8',
+    password: 'kevin12345@',
   });
 
   const onLogin = () => {
     Keyboard.dismiss();
-    signIn({ username, password });
+    signIn({username, password});
   };
 
   useEffect(() => {
-    if (errorMessage.length === 0) {
-      return;
-    }
-    Alert.alert("Error de autenticación", errorMessage, [
-      { text: "Ok", onPress: removeError },
-    ]);
+    if (errorMessage == null || errorMessage.length === 0) return;
+
+    showToastMessage(false, errorMessage, 'Error de autenticación');
+    removeError();
   }, [errorMessage]);
+
   return (
     <>
       <Background />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
+      <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={authStyles.formContainer}>
           <Logo />
 
-          <Text style={authStyles.title}>Autenticación</Text>
-          <Text style={authStyles.label}>Usuario</Text>
+          <Text style={{...authStyles.title, color: 'white'}}>Autenticación</Text>
+          <Text style={{...authStyles.label, color: 'white'}}>Usuario</Text>
 
           <TextInput
-            placeholder="Ingrese su usuario"
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            underlineColorAndroid="white"
+            placeholder='Ingrese su usuario'
+            placeholderTextColor='rgba(255,255,255,0.4)'
+            underlineColorAndroid='white'
             style={authStyles.input}
-            selectionColor="white"
-            autoCapitalize="none"
+            selectionColor='white'
+            autoCapitalize='none'
             autoCorrect={false}
-            onChangeText={(value) => onChangue(value, "username")}
+            onChangeText={(value) => onChangue(value, 'username')}
             value={username}
           />
 
@@ -70,26 +58,22 @@ const Auth = ({ navigation }: Props) => {
 
           <TextInput
             secureTextEntry
-            placeholder="*********"
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            underlineColorAndroid="white"
+            placeholder='*********'
+            placeholderTextColor='rgba(255,255,255,0.4)'
+            underlineColorAndroid='white'
             style={authStyles.input}
-            selectionColor="white"
-            autoCapitalize="none"
+            selectionColor='white'
+            autoCapitalize='none'
             autoCorrect={false}
-            onChangeText={(value) => onChangue(value, "password")}
+            onChangeText={(value) => onChangue(value, 'password')}
             value={password}
             onSubmitEditing={onLogin}
           />
 
           <View style={authStyles.buttonContainer}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={authStyles.button}
-              onPress={onLogin}
-            >
-              <Text style={authStyles.buttonText}>Ingresar</Text>
-            </TouchableOpacity>
+            <Button mode='contained' loading={loading} onPress={onLogin} disabled={loading} style={authStyles.button}>
+              Iniciar sesión
+            </Button>
           </View>
         </View>
       </KeyboardAvoidingView>

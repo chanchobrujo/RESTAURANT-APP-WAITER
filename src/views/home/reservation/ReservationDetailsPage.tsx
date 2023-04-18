@@ -53,7 +53,9 @@ const ReservationDetailsPage = ({navigation, route}: Props) => {
         <ActivityIndicator size={15} />
       ) : (
         <ScrollView style={style.content}>
-          {collection.map((value: CartResponse, i: number) => (
+          {collection
+            .filter(cart => cart.estado != 'Pagado')
+            .map((value: CartResponse, i: number) => (
             <CartDetails key={i} cart={value} board={reservation.board} />
           ))}
         </ScrollView>

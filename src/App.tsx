@@ -12,7 +12,7 @@ import {RootStackParams} from './router/Router';
 import {AuthProvider} from './context/auth/AuthContext';
 import {CartProvider} from './context/cart/CartContext';
 import {BoardProvider} from './context/board/BoardContext';
-import {SERVICE_CALL} from '../environment/environment.prod';
+import {SERVICE_NOTIFICATIONS} from '../environment/environment.prod';
 import {NotifyProvider} from './context/notifies/NotifyContext';
 import {ReservationProvider} from './context/reservation/ReservationContext';
 import {UnitDeliveryProvider} from './context/unitDelivery/UnitDeliveryContext';
@@ -30,7 +30,7 @@ Object.assign(global, {
 
 export const _stompClient: Client = new Client();
 export const width = Dimensions.get('window').width;
-export const url = SERVICE_CALL.concat('/chat-websocket');
+export const url = SERVICE_NOTIFICATIONS.concat('/chat-websocket');
 
 const AppState = ({children}: any) => {
   return (

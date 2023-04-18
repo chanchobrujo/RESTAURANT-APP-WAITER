@@ -20,7 +20,9 @@ export const FoodCard = ({food}: Props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    let image: string = FILE.concat(food.images[0]);
+    food.images[0] = 'https://www.comedera.com/wp-content/uploads/2022/05/Arroz-con-pato-peruano-shutterstock_1846729603.jpg';
+    //let image: string = FILE.concat(food.images[0]);
+    let image: string = 'https://www.comedera.com/wp-content/uploads/2022/05/Arroz-con-pato-peruano-shutterstock_1846729603.jpg';
     ImageColors.getColors(image, {
       fallback: 'grey',
     }).then((color: any) => {
@@ -34,9 +36,7 @@ export const FoodCard = ({food}: Props) => {
   }, []);
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.9}
-      onPress={() => navigation.navigate('FoodDetails', {food, color: bgColor})}>
+    <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('FoodDetails', {food, color: bgColor})}>
       <View
         style={{
           ...styles.cardContainer,
@@ -47,7 +47,13 @@ export const FoodCard = ({food}: Props) => {
           <Text style={styles.nameCard}>{food.names[0]}</Text>
         </View>
 
-        <FadeInImage uri={FILE.concat(food.images[0])} style={styles.foodImage} />
+        <FadeInImage
+          uri={
+            'https://www.comedera.com/wp-content/uploads/2022/05/Arroz-con-pato-peruano-shutterstock_1846729603.jpg'
+            //*FILE.concat(food.images[0])*//
+          }
+          style={styles.foodImage}
+        />
       </View>
     </TouchableOpacity>
   );

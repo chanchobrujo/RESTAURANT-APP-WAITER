@@ -1,9 +1,9 @@
-import {SERVICE_CALL} from '../../environment/environment.prod';
+import {SERVICE_AUTH} from '../../environment/environment.prod';
 import {builderApi, builderAuthoriesByStorage} from './utilsApi';
 
 export const apisAuth = () => {
-  const authApi = builderApi(SERVICE_CALL, '/auth');
-  const profileApi = builderApi(SERVICE_CALL, '/my-personal-data');
+  const authApi = builderApi(SERVICE_AUTH, '/auth');
+  const profileApi = builderApi(SERVICE_AUTH, '/my-personal-data');
 
   builderAuthoriesByStorage(authApi);
   builderAuthoriesByStorage(profileApi);
